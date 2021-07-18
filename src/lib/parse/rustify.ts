@@ -44,10 +44,11 @@ const rustify = (program: Program): string => {
     }),
     `}`,
     "",
-    ...Object.entries(program.instructions).flatMap(([k]) => {
+    ...Object.entries(program.instructions).flatMap(([k, v]) => {
       return [
         "#[derive(Accounts)]",
         `pub struct ${pascalCase(k)}<'info> {`,
+        ...v.decorators.flatMap((d) => parseDecorator(d)),
         `}`,
         "",
       ];
@@ -72,3 +73,19 @@ const rustify = (program: Program): string => {
 };
 
 export default rustify;
+
+function parseDecorator(d: string) {
+  let match = d.match(/@init\("(.+)"\)/);
+  if (match?.[1]) {
+    return [
+      "#[account(init)]",
+      `pub ${match[1]}: ProgramAccount<'info, ${pascalCase(match[1])}>,`,
+      `pub rent: Sysvar<'info, Rent>,`,
+    ];
+  }
+  match = d.match(/@signer\("(.+)"\)/);
+  if (match?.[1]) {
+    return ["#[account(signer)]", `pub ${match[1]}: AccountInfo<'info>,`];
+  }
+  return [`// ${d}`];
+}

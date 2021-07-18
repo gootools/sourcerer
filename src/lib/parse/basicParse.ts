@@ -33,7 +33,7 @@ const basicParse = (data: string): Program => {
           program.accounts[name] = fields;
         } else if (Node.isMethodDeclaration(node)) {
           const { name, params, decorators } = parseInstruction(node);
-          program.instructions[name] = { params };
+          program.instructions[name] = { params, decorators };
         } else {
           // console.log(node.getText());
         }
