@@ -2,9 +2,11 @@ lockfileVersion: 5.3
 
 specifiers:
   '@monaco-editor/react': ^4.2.1
+  '@types/lodash': ^4.14.171
   '@types/react': ^17.0.14
   '@types/react-dom': ^17.0.9
   '@vitejs/plugin-react-refresh': ^1.3.5
+  lodash: ^4.17.21
   monaco-editor: ^0.26.1
   react: ^17.0.2
   react-dom: ^17.0.2
@@ -14,12 +16,14 @@ specifiers:
 
 dependencies:
   '@monaco-editor/react': 4.2.1_f8ec6b5d7d3446ee9d2be2965aae1831
+  lodash: 4.17.21
   monaco-editor: 0.26.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   ts-morph: 11.0.3
 
 devDependencies:
+  '@types/lodash': 4.14.171
   '@types/react': 17.0.14
   '@types/react-dom': 17.0.9
   '@vitejs/plugin-react-refresh': 1.3.5
@@ -328,6 +332,10 @@ packages:
       path-browserify: 1.0.1
     dev: false
 
+  /@types/lodash/4.14.171:
+    resolution: {integrity: sha512-7eQ2xYLLI/LsicL2nejW9Wyko3lcpN6O/z0ZLHrEQsg280zIdCv1t/0m6UtBjUHokCGBQ3gYTbHzDkZ1xOBwwg==}
+    dev: true
+
   /@types/prop-types/15.7.4:
     resolution: {integrity: sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==}
     dev: true
@@ -584,6 +592,10 @@ packages:
     dependencies:
       minimist: 1.2.5
     dev: true
+
+  /lodash/4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
 
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
