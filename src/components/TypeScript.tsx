@@ -2,6 +2,23 @@ import Editor, { BeforeMount, OnMount } from "@monaco-editor/react";
 import React, { useEffect, useMemo } from "react";
 import Worker from "../lib/parse.ts?worker";
 
+const defaultValue = `// @anchor
+class Basic1 {
+  myAccount: {
+    data: u64;
+    authority: pubKey;
+  };
+
+  // @init("authority")
+  initialize(data: u64) {
+    this.myAccount.data = data;
+  }
+
+  update(data: u64) {
+    this.myAccount.data = data;
+  }
+}`;
+
 function TypeScript({ setRust }: { setRust: any }) {
   const worker = useMemo(() => new Worker(), []);
   useEffect(() => {
@@ -9,6 +26,7 @@ function TypeScript({ setRust }: { setRust: any }) {
       setRust(data);
     };
     worker.addEventListener("message", handleMessage);
+    worker.postMessage(defaultValue);
     return () => {
       worker.removeEventListener("message", handleMessage);
     };
@@ -46,25 +64,15 @@ function TypeScript({ setRust }: { setRust: any }) {
         if (value) worker.postMessage(value);
       }}
       onMount={handleEditorDidMount}
-      options={{ fontSize: 15, minimap: { enabled: false } }}
+      options={{
+        fontSize: 15,
+        scrollBeyondLastLine: false,
+        scrollbar: { vertical: "auto" },
+        minimap: { enabled: false },
+      }}
       theme="vs-dark"
       defaultLanguage="typescript"
-      defaultValue={`// @anchor
-class Basic1 {
-  myAccount: {
-    data: u64;
-    authority: pubKey;
-  };
-
-  // @init("authority")
-  initialize(data: u64) {
-    this.myAccount.data = data;
-  }
-
-  update(data: u64) {
-    this.myAccount.data = data;
-  }
-}`}
+      defaultValue={defaultValue}
     />
   );
 }
