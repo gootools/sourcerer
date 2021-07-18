@@ -6,7 +6,7 @@ const App = () => {
   const [rust, setRust] = useState("");
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
       <div style={{ flex: 1 }}>
         <TypeScript setRust={setRust} />
       </div>

@@ -1,0 +1,4 @@
+[submodule "src/lib/rustfmt-wasm"]
+	path = src/lib/rustfmt-wasm
+	url = https://github.com/alexcrichton/rustfmt-wasm.git
+	branch = gh-pages

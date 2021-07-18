@@ -1,11 +1,39 @@
+import Editor from "@monaco-editor/react";
 import React from "react";
+import "../lib/rustfmt-wasm/wasm_rustfmt";
+import wasmUrl from "../lib/rustfmt-wasm/wasm_rustfmt_bg.wasm?url";
 
-const Rust = ({ rust }: { rust: any }) => (
-  <div
-    style={{ background: "black", padding: 20, color: "white", height: "100%" }}
-  >
-    <pre>{rust}</pre>
-  </div>
-);
+let rustfmt;
+wasm_bindgen(wasmUrl).then(() => {
+  rustfmt = wasm_bindgen.rustfmt;
+});
+
+function Rust({ rust }: { rust: string }) {
+  if (rustfmt) {
+    const result = rustfmt(rust);
+    const err = result.error();
+    if (err) {
+      rust = "error";
+    } else {
+      rust = result.code();
+    }
+    result.free();
+  }
+
+  return (
+    <Editor
+      options={{
+        fontSize: 15,
+        scrollBeyondLastLine: false,
+        scrollbar: { vertical: "auto" },
+        minimap: { enabled: false },
+        readOnly: true,
+      }}
+      theme="vs-dark"
+      defaultLanguage="rust"
+      value={rust}
+    />
+  );
+}
 
 export default Rust;
