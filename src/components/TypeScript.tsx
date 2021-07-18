@@ -70,6 +70,19 @@ function TypeScript({ setRust }: { setRust: any }) {
         ) {
         };
       }
+
+      /**
+       * Specify the signer account for the instruction
+       * @param accountName
+       */
+      function signer(accountName: string) {
+        return function (
+          target: any,
+          propertyKey: string,
+          descriptor: PropertyDescriptor
+        ) {
+        };
+      }
       `
     );
   };
