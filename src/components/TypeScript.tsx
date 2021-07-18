@@ -55,6 +55,23 @@ function TypeScript({ setRust }: { setRust: any }) {
       `,
       "types.d.ts"
     );
+
+    monaco.languages.typescript.typescriptDefaults.addExtraLib(
+      `
+      /**
+       * Initializes the account
+       * @param accountName
+       */
+      function init(accountName: string) {
+        return function (
+          target: any,
+          propertyKey: string,
+          descriptor: PropertyDescriptor
+        ) {
+        };
+      }
+      `
+    );
   };
 
   return (
