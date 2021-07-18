@@ -13,7 +13,8 @@ function Rust({ rust }: { rust: string }) {
     const result = rustfmt(rust);
     const err = result.error();
     if (err) {
-      rust = "error";
+      rust = "";
+      console.error(err);
     } else {
       rust = result.code();
     }
