@@ -2,20 +2,22 @@ import Editor, { BeforeMount, OnMount } from "@monaco-editor/react";
 import React, { useEffect, useMemo } from "react";
 import Worker from "../lib/parse/worker.ts?worker";
 
-const defaultValue = `// @anchor
-class Basic1 {
-  myAccount: {
-    data: u64;
+// @anchor
+const defaultValue = `class Basic2 {
+  counter: {
     authority: pubKey;
+    count: u64;
   };
 
-  // @init("authority")
-  initialize(data: u64) {
-    this.myAccount.data = data;
+  @init("counter")
+  create(authority: pubKey) {
+    this.counter.authority = authority;
+    this.counter.count = 0;
   }
 
-  update(data: u64) {
-    this.myAccount.data = data;
+  @signer("authority")
+  increment() {
+    this.counter.count += 1;
   }
 }`;
 
