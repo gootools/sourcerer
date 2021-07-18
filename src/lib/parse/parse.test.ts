@@ -69,7 +69,7 @@ test("rustifies", () => {
   expect(rustify(basicParse(typescript))).toEqual(anchor);
 });
 
-test("basic parse", () => {
+test.only("basic parse", () => {
   expect(basicParse(typescript)).toEqual({
     name: "Basic2",
     accounts: {
@@ -83,9 +83,11 @@ test("basic parse", () => {
         params: {
           authority: "pubKey",
         },
+        decorators: ['@init("counter")'],
       },
       increment: {
         params: {},
+        decorators: ['@signer("authority")'],
       },
     },
   });

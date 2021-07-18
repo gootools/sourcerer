@@ -35,37 +35,10 @@ const basicParse = (data: string): Program => {
           const { name, params, decorators } = parseInstruction(node);
           program.instructions[name] = { params, decorators };
         } else {
+          console.log(node.getText());
           // console.log(node.getText());
         }
       });
-
-      // klass.getProperties().forEach((account) => {
-      //   program.accounts[account.getName()] = {};
-      //   console.log(account.getNextSibling()?.getText());
-      // });
-
-      // klass.getMethods().forEach((instruction) => {
-      //   program.instructions[instruction.getName()] ??= {};
-
-      //   instruction.getParameters().forEach((param) => {
-      //     // const realType = param
-      //     //   .getType()
-      //     //   .getText()
-      //     //   .replace(/[^a-z0-9]/gi, "");
-
-      //     const [paramName, type] = param
-      //       .getText()
-      //       .split(":")
-      //       .map((x) => x.trim())
-      //       .filter(Boolean);
-
-      //     program.instructions[instruction.getName()].params = {
-      //       ...(program.instructions[instruction.getName()].params || {}),
-      //       // [param.getName()]: type,
-      //       [paramName]: type,
-      //     };
-      //   });
-      // });
     });
 
   return program;
