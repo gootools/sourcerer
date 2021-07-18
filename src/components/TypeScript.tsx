@@ -1,6 +1,6 @@
 import Editor, { BeforeMount, OnMount } from "@monaco-editor/react";
 import React, { useEffect, useMemo } from "react";
-import Worker from "../lib/parse.ts?worker";
+import Worker from "../lib/parse/worker.ts?worker";
 
 const defaultValue = `// @anchor
 class Basic1 {
