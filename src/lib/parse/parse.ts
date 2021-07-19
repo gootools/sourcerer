@@ -80,7 +80,7 @@ function parseInstruction(node: MethodDeclaration) {
       );
     }
   });
-  console.log(instruction.block);
+  // console.log(instruction.block);
   return instruction;
 }
 
