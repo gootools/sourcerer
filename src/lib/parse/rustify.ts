@@ -41,7 +41,10 @@ const rustify = (program: Program): string => {
       return [
         "",
         `pub fn ${snakeCase(k)}(${params}) -> ProgramResult {`,
-        ...v.block.map((b) => b.replace("this.", "ctx.accounts.")),
+        ...v.block.map((b) => {
+          const [, ctx, accountName, rest] = b.match(/(this)\.(\w+)\.?(.*)/);
+          return ["ctx.accounts", snakeCase(accountName), rest].join(".");
+        }),
         "Ok(())",
         `}`,
       ];
