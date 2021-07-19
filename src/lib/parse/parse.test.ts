@@ -84,10 +84,15 @@ test.only("basic parse", () => {
           authority: "pubKey",
         },
         decorators: ['@init("counter")'],
+        block: [
+          "this.counter.authority = authority;",
+          "this.counter.count = 0;",
+        ],
       },
       increment: {
         params: {},
         decorators: ['@signer("authority")'],
+        block: ["this.counter.count += 1;"],
       },
     },
   });
