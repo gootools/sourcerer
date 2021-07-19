@@ -7,37 +7,35 @@ const defaultValue = `// class Basic0 {
 //   initialize() {}
 // }
 
-class Basic1 {
-  myAccount: {
-    data: u64
-  }
-  @init("myAccount")
-  initialize(data:u64) {
-    this.myAccount.data = data;
-  }
-  update(data:u64) {
-    this.myAccount.data = data;
-  }
-}
-
-// class Basic2 {
-//   counter: {
-//     count: u64;
-//     authority: pubKey;
+// class Basic1 {
+//   myAccount: {
+//     data: u64
 //   }
-
-//   @init("counter")
-//   create(authority:pubKey) {
-//     this.counter.count = 0;
-//     this.counter.authority = authority;
+//   @init("myAccount")
+//   initialize(data:u64) {
+//     this.myAccount.data = data;
 //   }
-
-//   @signer("authority")
-//   @mut("counter", { hasOne: "authority" })
 //   update(data:u64) {
-//     this.counter.count += 1;
+//     this.myAccount.data = data;
 //   }
-// }`;
+// }
+
+class Basic2 {
+  counter: {
+    count: u64;
+    authority: pubKey;
+  }
+  @init("counter")
+  create(authority:pubKey) {
+    this.counter.count = 0;
+    this.counter.authority = authority;
+  }
+  @signer("authority")
+  @mut("counter", { hasOne: "authority" })
+  update(data:u64) {
+    this.counter.count += 1;
+  }
+}`;
 
 function TypeScript({ setRust }: { setRust: any }) {
   const worker = useMemo(() => new Worker(), []);
