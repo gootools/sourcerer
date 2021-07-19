@@ -30,7 +30,11 @@ const rustify = (program: Program): string => {
             acc.push(`${k}: ${type(v)}`);
             return acc;
           },
-          [`ctx: Context<${pascalCase(k)}>`]
+          [
+            `${
+              v.block.toString().includes("this.") ? "" : "_"
+            }ctx: Context<${pascalCase(k)}>`,
+          ]
         )
         .join(", ");
 
