@@ -3,23 +3,41 @@ import React, { useEffect, useMemo } from "react";
 import Worker from "../lib/parse/worker.ts?worker";
 
 // @anchor
-const defaultValue = `class Basic2 {
-  counter: {
-    authority: pubKey;
-    count: u64;
-  };
+const defaultValue = `// class Basic0 {
+//   initialize() {}
+// }
 
-  @init("counter")
-  create(authority: pubKey) {
-    this.counter.authority = authority;
-    this.counter.count = 0;
+class Basic1 {
+  myAccount: {
+    data: u64
   }
+  @init("myAccount")
+  initialize(data:u64) {
+    this.myAccount.data = data;
+  }
+  update(data:u64) {
+    this.myAccount.data = data;
+  }
+}
 
-  @signer("authority")
-  increment() {
-    this.counter.count += 1;
-  }
-}`;
+// class Basic2 {
+//   counter: {
+//     count: u64;
+//     authority: pubKey;
+//   }
+
+//   @init("counter")
+//   create(authority:pubKey) {
+//     this.counter.count = 0;
+//     this.counter.authority = authority;
+//   }
+
+//   @signer("authority")
+//   @mut("counter", { hasOne: "authority" })
+//   update(data:u64) {
+//     this.counter.count += 1;
+//   }
+// }`;
 
 function TypeScript({ setRust }: { setRust: any }) {
   const worker = useMemo(() => new Worker(), []);
@@ -60,16 +78,29 @@ function TypeScript({ setRust }: { setRust: any }) {
 
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
       `
+      type ProtoOf<T> = Pick<T, keyof T>;
+
       /**
        * Initializes the account
        * @param accountName
        */
-      function init(accountName: string) {
-        return function (
-          target: any,
-          propertyKey: string,
-          descriptor: PropertyDescriptor
-        ) {
+      function init<CK extends string>(accountName: CK) {
+        //return function<T extends Base & {[P in CK]: G}> (
+        //  target: any,
+        //  propertyKey: string,
+        //  descriptor: PropertyDescriptor
+        //) {
+        //};
+
+        return <
+          T extends Base & {[P in CK]: G},
+          K extends keyof T,
+          F extends T[K] & G,
+          R>(
+            proto: ProtoOf<T> & {[P in CK]: Record<string,unknown>},
+            propertyKey: K,
+            descriptor: TypedPropertyDescriptor<F>) => {
+          // Do stuff.
         };
       }
 
@@ -77,7 +108,36 @@ function TypeScript({ setRust }: { setRust: any }) {
        * Specify the signer account for the instruction
        * @param accountName
        */
-      function signer(accountName: string) {
+       function signer(accountName: string) {
+        return function (
+          target: any,
+          propertyKey: string,
+          descriptor: PropertyDescriptor
+        ) {
+        };
+      }
+      // function signer<CK extends string>(accountName: CK) {
+      //   return <
+      //     T extends Base & {[P in CK]: G},
+      //     K extends keyof T,
+      //     F extends T[K] & G,
+      //     R>(
+      //       proto: ProtoOf<T> & {[P in CK]: pubKey},
+      //       propertyKey: K,
+      //       descriptor: TypedPropertyDescriptor<F>) => {
+      //     // Do stuff.
+      //   };
+      // }
+
+      /**
+       * Makes an account mutable
+       * @param accountName
+       * @param opts
+       */
+      interface MutOpts {
+        hasOne?: string
+      }
+      function mut(accountName: keyof this, opts?: MutOpts = {}) {
         return function (
           target: any,
           propertyKey: string,

@@ -1,4 +1,4 @@
-import basicParse from "./basicParse";
+import parse from "./parse";
 import rustify from "./rustify";
 
 const typescript = `
@@ -65,12 +65,12 @@ pub struct Counter {
 }`.replace(/^\s+/gm, "");
 
 test("rustifies", () => {
-  console.log(basicParse(typescript));
-  expect(rustify(basicParse(typescript))).toEqual(anchor);
+  console.log(parse(typescript));
+  expect(rustify(parse(typescript))).toEqual(anchor);
 });
 
 test.only("basic parse", () => {
-  expect(basicParse(typescript)).toEqual({
+  expect(parse(typescript)).toEqual({
     name: "Basic2",
     accounts: {
       counter: {

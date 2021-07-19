@@ -37,7 +37,7 @@ const rustify = (program: Program): string => {
       return [
         "",
         `pub fn ${snakeCase(k)}(${params}) -> ProgramResult {`,
-        // `pub data: u64,`,
+        ...v.block.map((b) => b.replace("this.", "ctx.accounts.")),
         "Ok(())",
         `}`,
       ];
@@ -47,7 +47,9 @@ const rustify = (program: Program): string => {
     ...Object.entries(program.instructions).flatMap(([k, v]) => {
       return [
         "#[derive(Accounts)]",
-        `pub struct ${pascalCase(k)}<'info> {`,
+        `pub struct ${pascalCase(k)}${
+          v.decorators.length > 0 ? "<'info>" : ""
+        } {`,
         ...v.decorators.flatMap((d) => parseDecorator(d)),
         `}`,
         "",
@@ -57,7 +59,7 @@ const rustify = (program: Program): string => {
       .filter(([, v]) => Object.keys(v).length > 0)
       .flatMap(([k, v]) => {
         const fields = Object.entries(v).reduce((acc, [k, v]) => {
-          acc.push(`pub ${k}: ${type(v)},`);
+          acc.push(`pub ${snakeCase(k)}: ${type(v)},`);
           return acc;
         }, [] as string[]);
 
@@ -79,7 +81,9 @@ function parseDecorator(d: string) {
   if (match?.[1]) {
     return [
       "#[account(init)]",
-      `pub ${match[1]}: ProgramAccount<'info, ${pascalCase(match[1])}>,`,
+      `pub ${snakeCase(match[1])}: ProgramAccount<'info, ${pascalCase(
+        match[1]
+      )}>,`,
       `pub rent: Sysvar<'info, Rent>,`,
     ];
   }
