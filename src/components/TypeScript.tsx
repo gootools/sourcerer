@@ -54,6 +54,11 @@ function TypeScript({ setRust }: { setRust: any }) {
 
   const handleEditorWillMount: BeforeMount = (monaco) => {
     monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+
+    import("monaco-themes/themes/Tomorrow-Night-Bright.json").then((data) => {
+      monaco.editor.defineTheme("theme", data);
+      monaco.editor.setTheme("theme");
+    });
   };
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
@@ -70,7 +75,20 @@ function TypeScript({ setRust }: { setRust: any }) {
 
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
       `
+      type u8 = number;
+      type u16 = number;
+      type u32 = number;
       type u64 = number;
+      type u128 = number;
+      type usize = number;
+
+      type i8 = number;
+      type i16 = number;
+      type i32 = number;
+      type i64 = number;
+      type i128 = number;
+      type isize = number;
+
       type pubKey = number;
       `,
       "types.d.ts"
@@ -157,7 +175,17 @@ function TypeScript({ setRust }: { setRust: any }) {
       }}
       onMount={handleEditorDidMount}
       options={{
-        fontSize: 15,
+        padding: {
+          top: 20,
+          bottom: 20,
+        },
+        lineNumbers: "off",
+        renderLineHighlight: "none",
+        fontFamily: "JetBrains Mono",
+        fontLigatures: true,
+        fontWeight: "400",
+        lineHeight: 28,
+        fontSize: 19,
         scrollBeyondLastLine: false,
         scrollbar: { vertical: "auto" },
         minimap: { enabled: false },

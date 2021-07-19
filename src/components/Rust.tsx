@@ -24,7 +24,17 @@ function Rust({ rust }: { rust: string }) {
   return (
     <Editor
       options={{
-        fontSize: 15,
+        padding: {
+          top: 10,
+          bottom: 10,
+        },
+        lineNumbers: "off",
+        renderLineHighlight: "none",
+        fontFamily: "JetBrains Mono",
+        fontLigatures: true,
+        fontWeight: "400",
+        lineHeight: 18,
+        fontSize: 14,
         scrollBeyondLastLine: false,
         scrollbar: { vertical: "auto" },
         minimap: { enabled: false },
