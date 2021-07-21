@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 export type u8 = number;
 export type u16 = number;
 export type u32 = number;
@@ -80,4 +82,12 @@ export function mut(accountName: keyof this, opts?: MutOpts = {}) {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {};
+}
+
+export function hasOne(formatString: string) {
+  return Reflect.metadata(Symbol("hasOne"), formatString);
+}
+
+export class AnchorProgram {
+  constructor(publicKey: Pubkey) {}
 }

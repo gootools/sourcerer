@@ -16,6 +16,7 @@
     "ts-morph": "^11.0.3"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.171",
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.14",

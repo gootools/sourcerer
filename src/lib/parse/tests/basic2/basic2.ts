@@ -1,18 +1,80 @@
-import { init, mut, Pubkey, signer, u64 } from "../extras";
+import { hasOne, Pubkey, u64 } from "../extras";
 
 export class Basic2 {
+  @hasOne("authority")
   counter: {
     authority: Pubkey;
     count: u64;
   };
-  @init("counter")
+
+  // @init("counter")
   create(authority: Pubkey) {
-    this.counter.count = 0;
-    this.counter.authority = authority;
+    // ExpressionStatement
+    //   BinaryExpression
+    //     PropertyAccessExpression
+    //       ThisKeyword
+    //       Identifier
+    //     EqualsToken
+    this.counter = {
+      count: 0,
+      authority,
+    };
   }
-  @mut("counter", { hasOne: "authority" })
-  @signer("authority")
+
+  // @mut("counter")
   increment() {
     this.counter.count += 1;
   }
 }
+
+const exp = {
+  name: "Basic2",
+  accounts: {
+    counter: {
+      type: {
+        authority: { type: "Pubkey", constraints: ["has_one"] },
+        count: { type: "u64" },
+      },
+    },
+  },
+  // instructions: {
+  //   create: {
+  //     params: {
+  //       authority: "Pubkey"
+  //     },
+  //     // block: {},
+  //     accounts: {
+  //       counter: {
+  //         type: "programAccount",
+  //         traits: ["init"]
+  //       },
+  //       rent: {
+  //         type: "sysvar"
+  //       }
+  //     }
+  //   },
+  //   increment: {
+
+  //   }
+  // }
+};
+
+// export class Basic2 {
+//   @hasOne("authority")
+//   counter: {
+//     authority: Pubkey;
+//     count: u64;
+//   };
+
+//   create(authority: Pubkey) {
+
+//     this.counter = {
+//       count: 0,
+//       authority,
+//     };
+//   }
+
+//   increment() {
+//     this.counter.count += 1;
+//   }
+// }
