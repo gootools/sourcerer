@@ -1,3 +1,3 @@
-class Basic0 {
+export class Basic0 {
   initialize() {}
 }

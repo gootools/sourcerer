@@ -52,12 +52,18 @@ const rustify = (program: Program): string => {
     `}`,
     "",
     ...Object.entries(program.instructions).flatMap(([k, v]) => {
+      let arr = v.decorators.flatMap((d) => parseDecorator(d));
+      if (arr.length === 0) {
+        arr = parse(v.block);
+      }
       return [
         "#[derive(Accounts)]",
         `pub struct ${pascalCase(k)}${
-          v.decorators.length > 0 ? "<'info>" : ""
+          v.decorators.length > 0 || String(v.block).includes("this.")
+            ? "<'info>"
+            : ""
         } {`,
-        ...v.decorators.flatMap((d) => parseDecorator(d)),
+        ...arr,
         `}`,
         "",
       ];
@@ -98,5 +104,52 @@ function parseDecorator(d: string) {
   if (match?.[1]) {
     return ["#[account(signer)]", `pub ${match[1]}: AccountInfo<'info>,`];
   }
+
+  try {
+    match = d.match(/@mut\(([^)]+)\)/m);
+    if (match?.[1]) {
+      const [account, stuff = {}] = eval(`[${match[1]}]`);
+
+      const parts = Object.entries(stuff)
+        .reduce(
+          (acc, [k, v]) => {
+            acc.push([snakeCase(k), v].join(" = "));
+            return acc;
+          },
+          ["mut"]
+        )
+        .join(", ");
+
+      return [
+        `#[account(${parts})]`,
+        `pub ${snakeCase(account)}: ProgramAccount<'info, ${pascalCase(
+          account
+        )}>,`,
+      ];
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  return [];
   return [`// ${d}`];
+}
+
+function parse(block: Array<string> = []) {
+  try {
+    const b = block.toString();
+    const [, ctx, accountName, rest] = b.match(/(this)\.(\w+)\.?(.*)/) ?? [];
+    console.log({ b, ctx, accountName, rest });
+    if (accountName) {
+      return [
+        "#[account(mut)]",
+        `pub ${snakeCase(accountName)}: ProgramAccount<'info, ${pascalCase(
+          accountName
+        )}>,`,
+      ];
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  return [];
 }
