@@ -31,15 +31,54 @@ test("newParse", () => {
         },
       },
     },
-    instructions: {},
+    instructions: {
+      create: {
+        params: {
+          authority: { type: "Pubkey" },
+        },
+      },
+      increment: {},
+    },
   });
 });
 
 test("anchorize", () => {
   expect(anchorize(newParse(ts))).toEqual({
     name: "basic_2",
-    instructions: {},
-    derived: {},
+    instructions: {
+      create: {
+        params: {
+          authority: {
+            type: "Pubkey",
+          },
+        },
+        block: [
+          "ctx.accounts.counter.count = 0",
+          "ctx.accounts.counter.authority = authority",
+        ],
+      },
+      update: {
+        params: {},
+        block: ["ctx.accounts.counter.count += 1"],
+      },
+    },
+    derived: {
+      Create: {
+        block: [
+          "#[account(init)]",
+          "pub counter: ProgramAccount<'info, Counter>",
+          "pub rent: Sysvar<'info, Rent>",
+        ],
+      },
+      Increment: {
+        block: [
+          "#[account(mut, has_one = authority)]",
+          "pub counter: ProgramAccount<'info, Counter>",
+          "#[account(signer)]",
+          "pub authority: AccountInfo<'info>",
+        ],
+      },
+    },
     accounts: {
       Counter: {
         authority: "Pubkey",
