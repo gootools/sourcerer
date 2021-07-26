@@ -1,6 +1,6 @@
 import { init, u64 } from "../extras";
 
-export class Basic1 {
+export class Basic_1 {
   myAccount: {
     data: u64;
   };

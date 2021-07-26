@@ -1,9 +1,6 @@
-import capitalize from "lodash/capitalize";
-import snakeCase from "lodash/snakeCase";
+import pascalCase from "just-pascal-case";
+import snakeCase from "just-snake-case";
 import type { Program } from "./parse";
-
-const pascalCase = (str: string) =>
-  snakeCase(str).split("_").map(capitalize).join("");
 
 const type = (key: string) => {
   switch (key) {
@@ -21,7 +18,7 @@ const rustify = (program: Program): string => {
     "use anchor_lang::prelude::*;",
     "",
     "#[program]",
-    `mod ${snakeCase(program.name)} {`,
+    `mod ${snakeCase(program.name!)} {`,
     `use super::*;`,
     ...Object.entries(program.instructions).flatMap(([k, v]) => {
       const params = Object.entries(v.params)
@@ -132,14 +129,14 @@ function parseDecorator(d: string) {
   }
 
   return [];
-  return [`// ${d}`];
+  // return [`// ${d}`];
 }
 
 function parse(block: Array<string> = []) {
   try {
     const b = block.toString();
     const [, ctx, accountName, rest] = b.match(/(this)\.(\w+)\.?(.*)/) ?? [];
-    console.log({ b, ctx, accountName, rest });
+    // console.log({ b, ctx, accountName, rest });
     if (accountName) {
       return [
         "#[account(mut)]",

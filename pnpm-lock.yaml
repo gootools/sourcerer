@@ -2,8 +2,8 @@ lockfileVersion: 5.3
 
 specifiers:
   '@monaco-editor/react': ^4.2.1
+  '@types/glob': ^7.1.4
   '@types/jest': ^26.0.24
-  '@types/lodash': ^4.14.171
   '@types/node': ^16.4.3
   '@types/react': ^17.0.15
   '@types/react-dom': ^17.0.9
@@ -13,11 +13,14 @@ specifiers:
   glob: ^7.1.7
   husky: ^7.0.1
   jest: ^27.0.6
+  just-capitalize: ^1.0.1
+  just-pascal-case: ^1.1.0
+  just-snake-case: ^1.2.1
   lint-staged: ^11.1.1
-  lodash: ^4.17.21
   monaco-editor: ^0.26.1
   monaco-themes: ^0.3.3
   prettier: ^2.3.2
+  rambda: ^6.8.3
   react: ^17.0.2
   react-dom: ^17.0.2
   ts-morph: ^11.0.3
@@ -26,16 +29,19 @@ specifiers:
 
 dependencies:
   '@monaco-editor/react': 4.2.1_f8ec6b5d7d3446ee9d2be2965aae1831
-  lodash: 4.17.21
+  just-capitalize: 1.0.1
+  just-pascal-case: 1.1.0
+  just-snake-case: 1.2.1
   monaco-editor: 0.26.1
   monaco-themes: 0.3.3
+  rambda: 6.8.3
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   ts-morph: 11.0.3
 
 devDependencies:
+  '@types/glob': 7.1.4
   '@types/jest': 26.0.24
-  '@types/lodash': 4.14.171
   '@types/node': 16.4.3
   '@types/react': 17.0.15
   '@types/react-dom': 17.0.9
@@ -786,6 +792,13 @@ packages:
       '@babel/types': 7.14.8
     dev: true
 
+  /@types/glob/7.1.4:
+    resolution: {integrity: sha512-w+LsMxKyYQm347Otw+IfBXOv9UWVjpHpCDdbBMt8Kz/xbvCYNjP+0qPh91Km3iKfSRLBB0P7fAMf0KHrPu+MyA==}
+    dependencies:
+      '@types/minimatch': 3.0.5
+      '@types/node': 16.4.3
+    dev: true
+
   /@types/graceful-fs/4.1.5:
     resolution: {integrity: sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==}
     dependencies:
@@ -815,8 +828,8 @@ packages:
       pretty-format: 26.6.2
     dev: true
 
-  /@types/lodash/4.14.171:
-    resolution: {integrity: sha512-7eQ2xYLLI/LsicL2nejW9Wyko3lcpN6O/z0ZLHrEQsg280zIdCv1t/0m6UtBjUHokCGBQ3gYTbHzDkZ1xOBwwg==}
+  /@types/minimatch/3.0.5:
+    resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
     dev: true
 
   /@types/node/16.4.3:
@@ -1691,7 +1704,7 @@ packages:
       cross-spawn: 7.0.3
       get-stream: 6.0.1
       human-signals: 2.1.0
-      is-stream: 2.0.0
+      is-stream: 2.0.1
       merge-stream: 2.0.0
       npm-run-path: 4.0.1
       onetime: 5.1.2
@@ -2210,8 +2223,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /is-stream/2.0.0:
-    resolution: {integrity: sha512-XCoy+WlUr7d1+Z8GgSuXmpuUFC9fOhRXglJMx+dwLKTkL44Cjd4W1Z5P+BQZpr+cR93aGP4S/s7Ftw6Nd/kiEw==}
+  /is-stream/2.0.1:
+    resolution: {integrity: sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==}
     engines: {node: '>=8'}
     dev: true
 
@@ -2905,6 +2918,18 @@ packages:
       minimist: 1.2.5
     dev: true
 
+  /just-capitalize/1.0.1:
+    resolution: {integrity: sha512-K7FY7ObOLfwr3QxjOLT8ECNgJOWcZ46KSoUZVZTEMMEK1yIOQBqgMgHXN+7rPRAw8LH10YG89pOudIMzyy0jdQ==}
+    dev: false
+
+  /just-pascal-case/1.1.0:
+    resolution: {integrity: sha512-9WrLmpZ2wbt/k9ZAwp8MMc9/RqPRzUZZ+szWmAGFkas4+/z//+xYN8iUOBR2gmpiH8X5rJ+/yMvNFalMSKwmyg==}
+    dev: false
+
+  /just-snake-case/1.2.1:
+    resolution: {integrity: sha512-ZhHKSHP3zVoZVwHdVAm5BqBruGtIWZ8W8NnTXj5/9jP7apN9GYYeoBSeJyt3yRfbfc3hT1Pe6bnW6nMmv8bMeQ==}
+    dev: false
+
   /kind-of/3.2.2:
     resolution: {integrity: sha1-MeohpzS6ubuw8yRm2JOupR5KPGQ=}
     engines: {node: '>=0.10.0'}
@@ -2999,6 +3024,7 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: true
 
   /log-symbols/4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
@@ -3490,6 +3516,10 @@ packages:
 
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+    dev: false
+
+  /rambda/6.8.3:
+    resolution: {integrity: sha512-vWeeKEuFyCLC0P7lPmnW9WOTK2Dpk5wFfrFdsmVaqyYEyrkGGx9zknySkYR52oRLLArhO+xIq8rl42OrIYlWtg==}
     dev: false
 
   /react-dom/17.0.2_react@17.0.2:

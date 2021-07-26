@@ -1,6 +1,6 @@
 import { hasOne, Pubkey, u64 } from "../extras";
 
-export class Basic2 {
+export class Basic_2 {
   @hasOne("authority")
   counter: {
     authority: Pubkey;

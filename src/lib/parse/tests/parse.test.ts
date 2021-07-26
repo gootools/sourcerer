@@ -1,25 +1,22 @@
-import { readdirSync, readFileSync } from "fs";
-import { join } from "path";
+import { readFileSync } from "fs";
+import glob from "glob";
+import { basename } from "path";
+import { pipe, replace } from "rambda";
 import parse from "../parse";
 import rustify from "../rustify";
 
-const getDirectories = (source) =>
-  readdirSync(source, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
-
-getDirectories(__dirname).forEach((dir) => {
-  const typescript = readFileSync(
-    join(__dirname, dir, `${dir}.ts`)
-  )?.toString();
-
-  const rust = readFileSync(join(__dirname, dir, `${dir}.rs`))?.toString();
-
-  if (typescript && rust) {
-    test(dir, () => {
-      expect(rustify(parse(typescript)).replace(/\s/g, "")).toEqual(
-        rust.replace(/\s/g, "")
-      );
-    });
-  }
+glob.sync("**/*.rs").forEach((rustFilePath) => {
+  test(basename(rustFilePath), () => {
+    expect(
+      pipe(replace(".rs", ".ts"), openFile, parse, rustify, trim)(rustFilePath)
+    ).toEqual(pipe(openFile, trim)(rustFilePath));
+  });
 });
+
+function trim(body: string) {
+  return body.replace(/\s/g, "");
+}
+
+function openFile(path: string) {
+  return readFileSync(path).toString();
+}

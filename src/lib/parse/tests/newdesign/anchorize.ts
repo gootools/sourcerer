@@ -1,9 +1,6 @@
-import capitalize from "lodash/capitalize";
-import snakeCase from "lodash/snakeCase";
+import capitalize from "just-capitalize";
+import snakeCase from "just-snake-case";
 import { Program } from "./newParse";
-
-const pascalCase = (str: string) =>
-  snakeCase(str).split("_").map(capitalize).join("");
 
 export interface AnchorProgram {
   name: string;
@@ -14,7 +11,7 @@ export interface AnchorProgram {
 
 export const anchorize = (program: Program) => {
   return {
-    name: snakeCase(program.name),
+    name: snakeCase(program.name!),
     instructions: {},
     derived: {},
     accounts: Object.entries(program.accounts).reduce((acc, [k, v]) => {
