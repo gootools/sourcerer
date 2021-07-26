@@ -2,6 +2,10 @@
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
+    "paths": {
+      "sourcerer": ["lib/sourcerer"]
+    },
     "emitDecoratorMetadata": true,
     "esModuleInterop": false,
     "experimentalDecorators": true,

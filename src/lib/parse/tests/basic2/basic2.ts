@@ -1,4 +1,4 @@
-import { hasOne } from "../extras";
+import { hasOne } from "sourcerer";
 
 export class Basic_2 {
   @hasOne("authority")

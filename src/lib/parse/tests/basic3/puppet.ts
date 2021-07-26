@@ -1,4 +1,4 @@
-import { AnchorProgram, hasOne } from "../extras";
+import { AnchorProgram, hasOne } from "sourcerer";
 
 export class Puppet extends AnchorProgram {
   @hasOne("authority")

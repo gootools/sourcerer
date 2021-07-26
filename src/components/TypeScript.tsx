@@ -1,8 +1,8 @@
 import { BeforeMount, OnMount } from "@monaco-editor/react";
 import React, { useEffect, useMemo } from "react";
-import defaultValue from "../lib/parse/tests/basic0/basic0?raw";
-import extras from "../lib/parse/tests/extras.ts?raw";
+import defaultValue from "../lib/parse/tests/basic1/basic1?raw";
 import Worker from "../lib/parse/worker.ts?worker";
+import sourcerer from "../lib/sourcerer.ts?raw";
 import types from "../types.d.ts?raw";
 import Editor from "./shared/Editor";
 
@@ -29,9 +29,23 @@ function TypeScript({ setRust }: { setRust: any }) {
   };
 
   const handleEditorDidMount: OnMount = (_editor, monaco) => {
+    monaco.languages.typescript.typescriptDefaults.addExtraLib(
+      types,
+      "types.d.ts"
+    );
+
+    monaco.languages.typescript.typescriptDefaults.addExtraLib(
+      // sourcerer.replace(/^(\s+)?export(\s+)/gm, ""),
+      sourcerer,
+      "sourcerer.ts"
+    );
+
     const defaults = {
       experimentalDecorators: true,
       emitDecoratorMetadata: true,
+      paths: {
+        sourcerer: ["sourcerer.ts"],
+      },
     };
 
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
@@ -43,16 +57,6 @@ function TypeScript({ setRust }: { setRust: any }) {
       ...monaco.languages.typescript.javascriptDefaults.getCompilerOptions(),
       ...defaults,
     });
-
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      types,
-      "types.d.ts"
-    );
-
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      extras.replace(/^(\s+)?export(\s+)/gm, ""),
-      "extras.ts"
-    );
   };
 
   return (

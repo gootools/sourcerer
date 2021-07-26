@@ -1,4 +1,4 @@
-import { init } from "../extras";
+import { init } from "sourcerer";
 
 export class Basic_1 {
   myAccount: {
