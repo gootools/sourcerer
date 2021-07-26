@@ -1,22 +1,4 @@
-import "reflect-metadata";
-
-export type u8 = number;
-export type u16 = number;
-export type u32 = number;
-export type u64 = number;
-export type u128 = number;
-export type usize = number;
-
-export type i8 = number;
-export type i16 = number;
-export type i32 = number;
-export type i64 = number;
-export type i128 = number;
-export type isize = number;
-
-export type Pubkey = number;
-
-export type ProtoOf<T> = Pick<T, keyof T>;
+// import "reflect-metadata";
 
 /**
  * Initializes the account
