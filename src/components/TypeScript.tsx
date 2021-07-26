@@ -1,6 +1,8 @@
 import Editor, { BeforeMount, OnMount } from "@monaco-editor/react";
 import React, { useEffect, useMemo } from "react";
+import extras from "../lib/parse/tests/extras.ts?raw";
 import Worker from "../lib/parse/worker.ts?worker";
+import types from "../types.d.ts?raw";
 
 // @anchor
 const defaultValue = `// class Basic0 {
@@ -60,108 +62,29 @@ function TypeScript({ setRust }: { setRust: any }) {
   };
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
+    const defaults = {
+      experimentalDecorators: true,
+      emitDecoratorMetadata: true,
+    };
+
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
       ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
-      experimentalDecorators: true,
-      emitDecoratorMetadata: true,
+      ...defaults,
     });
+
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
       ...monaco.languages.typescript.javascriptDefaults.getCompilerOptions(),
-      experimentalDecorators: true,
-      emitDecoratorMetadata: true,
+      ...defaults,
     });
 
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      `
-      type u8 = number;
-      type u16 = number;
-      type u32 = number;
-      type u64 = number;
-      type u128 = number;
-      type usize = number;
-
-      type i8 = number;
-      type i16 = number;
-      type i32 = number;
-      type i64 = number;
-      type i128 = number;
-      type isize = number;
-
-      type pubKey = number;
-      `,
+      types,
       "types.d.ts"
     );
 
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      `
-      type ProtoOf<T> = Pick<T, keyof T>;
-
-      /**
-       * Initializes the account
-       * @param accountName
-       */
-      function init<CK extends string>(accountName: CK) {
-        //return function<T extends Base & {[P in CK]: G}> (
-        //  target: any,
-        //  propertyKey: string,
-        //  descriptor: PropertyDescriptor
-        //) {
-        //};
-
-        return <
-          T extends Base & {[P in CK]: G},
-          K extends keyof T,
-          F extends T[K] & G,
-          R>(
-            proto: ProtoOf<T> & {[P in CK]: Record<string,unknown>},
-            propertyKey: K,
-            descriptor: TypedPropertyDescriptor<F>) => {
-          // Do stuff.
-        };
-      }
-
-      /**
-       * Specify the signer account for the instruction
-       * @param accountName
-       */
-       function signer(accountName: string) {
-        return function (
-          target: any,
-          propertyKey: string,
-          descriptor: PropertyDescriptor
-        ) {
-        };
-      }
-      // function signer<CK extends string>(accountName: CK) {
-      //   return <
-      //     T extends Base & {[P in CK]: G},
-      //     K extends keyof T,
-      //     F extends T[K] & G,
-      //     R>(
-      //       proto: ProtoOf<T> & {[P in CK]: pubKey},
-      //       propertyKey: K,
-      //       descriptor: TypedPropertyDescriptor<F>) => {
-      //     // Do stuff.
-      //   };
-      // }
-
-      /**
-       * Makes an account mutable
-       * @param accountName
-       * @param opts
-       */
-      interface MutOpts {
-        hasOne?: string
-      }
-      function mut(accountName: keyof this, opts?: MutOpts = {}) {
-        return function (
-          target: any,
-          propertyKey: string,
-          descriptor: PropertyDescriptor
-        ) {
-        };
-      }
-      `
+      extras.replace(/^(\s+)?export(\s+)/gm, ""),
+      "extras.ts"
     );
   };
 
