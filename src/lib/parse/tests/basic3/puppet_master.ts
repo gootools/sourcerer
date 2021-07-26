@@ -3,7 +3,7 @@ import { Puppet } from "./puppet";
 export class PuppetMaster {
   puppetProgram: Pubkey;
 
-  pullStrings(data: u64) {
+  pullStrings(data: U64) {
     new Puppet(this.puppetProgram).setData(data);
   }
 }

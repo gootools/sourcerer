@@ -1,7 +1,7 @@
-import Editor from "@monaco-editor/react";
 import React from "react";
 import "../lib/rustfmt-wasm/wasm_rustfmt";
 import wasmUrl from "../lib/rustfmt-wasm/wasm_rustfmt_bg.wasm?url";
+import Editor from "./shared/Editor";
 
 let rustfmt: (code: string) => {
   free(): void;
@@ -29,23 +29,14 @@ function Rust({ rust }: { rust: string }) {
   return (
     <Editor
       options={{
+        fontSize: 19,
+        lineHeight: 28,
         padding: {
-          top: 10,
-          bottom: 10,
+          top: 20,
+          bottom: 20,
         },
-        lineNumbers: "off",
-        renderLineHighlight: "none",
-        fontFamily: "JetBrains Mono",
-        fontLigatures: true,
-        fontWeight: "400",
-        lineHeight: 20,
-        fontSize: 17,
-        scrollBeyondLastLine: false,
-        scrollbar: { vertical: "auto" },
-        minimap: { enabled: false },
         readOnly: true,
       }}
-      theme="vs-dark"
       defaultLanguage="rust"
       value={rust}
     />

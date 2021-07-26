@@ -1,4 +1,3 @@
-// #region core
 use anchor_lang::prelude::*;
 use puppet::{Puppet, SetData};
 
@@ -21,4 +20,3 @@ pub struct PullStrings<'info> {
     pub puppet: CpiAccount<'info, Puppet>,
     pub puppet_program: AccountInfo<'info>,
 }
-// #endregion core

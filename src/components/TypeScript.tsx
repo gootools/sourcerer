@@ -1,43 +1,10 @@
-import Editor, { BeforeMount, OnMount } from "@monaco-editor/react";
+import { BeforeMount, OnMount } from "@monaco-editor/react";
 import React, { useEffect, useMemo } from "react";
+import defaultValue from "../lib/parse/tests/basic0/basic0?raw";
 import extras from "../lib/parse/tests/extras.ts?raw";
 import Worker from "../lib/parse/worker.ts?worker";
 import types from "../types.d.ts?raw";
-
-// @anchor
-const defaultValue = `// class Basic0 {
-//   initialize() {}
-// }
-
-// class Basic1 {
-//   myAccount: {
-//     data: u64
-//   }
-//   @init("myAccount")
-//   initialize(data:u64) {
-//     this.myAccount.data = data;
-//   }
-//   update(data:u64) {
-//     this.myAccount.data = data;
-//   }
-// }
-
-class Basic2 {
-  counter: {
-    count: u64;
-    authority: pubKey;
-  }
-  @init("counter")
-  create(authority:pubKey) {
-    this.counter.count = 0;
-    this.counter.authority = authority;
-  }
-  @signer("authority")
-  @mut("counter", { hasOne: "authority" })
-  update(data:u64) {
-    this.counter.count += 1;
-  }
-}`;
+import Editor from "./shared/Editor";
 
 function TypeScript({ setRust }: { setRust: any }) {
   const worker = useMemo(() => new Worker(), []);
@@ -61,7 +28,7 @@ function TypeScript({ setRust }: { setRust: any }) {
     });
   };
 
-  const handleEditorDidMount: OnMount = (editor, monaco) => {
+  const handleEditorDidMount: OnMount = (_editor, monaco) => {
     const defaults = {
       experimentalDecorators: true,
       emitDecoratorMetadata: true,
@@ -95,23 +62,6 @@ function TypeScript({ setRust }: { setRust: any }) {
         if (value) worker.postMessage(value);
       }}
       onMount={handleEditorDidMount}
-      options={{
-        padding: {
-          top: 20,
-          bottom: 20,
-        },
-        lineNumbers: "off",
-        renderLineHighlight: "none",
-        fontFamily: "JetBrains Mono",
-        fontLigatures: true,
-        fontWeight: "400",
-        lineHeight: 28,
-        fontSize: 19,
-        scrollBeyondLastLine: false,
-        scrollbar: { vertical: "auto" },
-        minimap: { enabled: false },
-      }}
-      theme="vs-dark"
       defaultLanguage="typescript"
       defaultValue={defaultValue}
     />
