@@ -1,4 +1,3 @@
-import { Pubkey, u64 } from "../extras";
 import { Puppet } from "./puppet";
 
 export class PuppetMaster {

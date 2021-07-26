@@ -1,4 +1,4 @@
-import { init, u64 } from "../extras";
+import { init } from "../extras";
 
 export class Basic_1 {
   myAccount: {

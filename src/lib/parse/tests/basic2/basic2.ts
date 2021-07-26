@@ -1,4 +1,4 @@
-import { hasOne, Pubkey, u64 } from "../extras";
+import { hasOne } from "../extras";
 
 export class Basic_2 {
   @hasOne("authority")
