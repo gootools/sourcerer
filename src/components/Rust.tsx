@@ -3,9 +3,14 @@ import React from "react";
 import "../lib/rustfmt-wasm/wasm_rustfmt";
 import wasmUrl from "../lib/rustfmt-wasm/wasm_rustfmt_bg.wasm?url";
 
-let rustfmt;
-wasm_bindgen(wasmUrl).then(() => {
-  rustfmt = wasm_bindgen.rustfmt;
+let rustfmt: (code: string) => {
+  free(): void;
+  code(): string;
+  error(): string;
+};
+
+window.wasm_bindgen(wasmUrl).then(() => {
+  rustfmt = window.wasm_bindgen.rustfmt;
 });
 
 function Rust({ rust }: { rust: string }) {
