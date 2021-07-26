@@ -56,7 +56,7 @@ function TypeScript({ setRust }: { setRust: any }) {
     monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
 
     import("monaco-themes/themes/Tomorrow-Night-Bright.json").then((data) => {
-      monaco.editor.defineTheme("theme", data);
+      monaco.editor.defineTheme("theme", data as any);
       monaco.editor.setTheme("theme");
     });
   };
