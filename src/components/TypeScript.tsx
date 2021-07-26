@@ -41,11 +41,16 @@ function TypeScript({ setRust }: { setRust: any }) {
     );
 
     const defaults = {
-      experimentalDecorators: true,
+      allowJs: false,
       emitDecoratorMetadata: true,
+      experimentalDecorators: true,
+      noImplicitAny: true,
+      noUnusedLocals: true,
       paths: {
         sourcerer: ["sourcerer.ts"],
       },
+      strict: true,
+      strictPropertyInitialization: false,
     };
 
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({

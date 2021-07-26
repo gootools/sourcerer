@@ -3,9 +3,6 @@
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
-    "paths": {
-      "sourcerer": ["lib/sourcerer"]
-    },
     "emitDecoratorMetadata": true,
     "esModuleInterop": false,
     "experimentalDecorators": true,
@@ -16,6 +13,11 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "noEmit": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "paths": {
+      "sourcerer": ["lib/sourcerer"]
+    },
     "resolveJsonModule": true,
     "skipLibCheck": false,
     "strict": true,
