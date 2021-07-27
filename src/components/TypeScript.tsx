@@ -1,4 +1,5 @@
 import { BeforeMount, OnMount } from "@monaco-editor/react";
+import { mergeDeepRight } from "rambda";
 import React, { useEffect, useMemo } from "react";
 import defaultValue from "../lib/parse/tests/basic1/basic1?raw";
 import Worker from "../lib/parse/worker.ts?worker";
@@ -40,6 +41,9 @@ function TypeScript({ setRust }: { setRust: any }) {
       "sourcerer.ts"
     );
 
+    monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+    monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
+
     const defaults = {
       allowJs: false,
       emitDecoratorMetadata: true,
@@ -53,15 +57,19 @@ function TypeScript({ setRust }: { setRust: any }) {
       strictPropertyInitialization: false,
     };
 
-    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-      ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
-      ...defaults,
-    });
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions(
+      mergeDeepRight(
+        monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
+        defaults
+      )
+    );
 
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-      ...monaco.languages.typescript.javascriptDefaults.getCompilerOptions(),
-      ...defaults,
-    });
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions(
+      mergeDeepRight(
+        monaco.languages.typescript.javascriptDefaults.getCompilerOptions(),
+        defaults
+      )
+    );
   };
 
   return (
