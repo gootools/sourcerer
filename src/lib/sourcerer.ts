@@ -58,7 +58,7 @@ export function signer(accountName: string) {
 interface MutOpts {
   hasOne?: string;
 }
-export function mut(accountName: keyof this, opts?: MutOpts = {}) {
+export function mut(accountName: string, opts: MutOpts = {}) {
   return function (
     target: any,
     propertyKey: string,

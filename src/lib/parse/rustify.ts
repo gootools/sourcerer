@@ -135,8 +135,7 @@ function parseDecorator(d: string) {
 function parse(block: Array<string> = []) {
   try {
     const b = block.toString();
-    const [, ctx, accountName, rest] = b.match(/(this)\.(\w+)\.?(.*)/) ?? [];
-    // console.log({ b, ctx, accountName, rest });
+    const [, _ctx, accountName, _rest] = b.match(/(this)\.(\w+)\.?(.*)/) ?? [];
     if (accountName) {
       return [
         "#[account(mut)]",

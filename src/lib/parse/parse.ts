@@ -48,7 +48,12 @@ const parse = (data: string): Program => {
 export default parse;
 
 function parseInstruction(node: MethodDeclaration) {
-  const instruction = {
+  const instruction: {
+    name: string;
+    params: Record<string, any>;
+    decorators: string[];
+    block: string[];
+  } = {
     name: node.getName(),
     params: {},
     decorators: [],
@@ -85,7 +90,10 @@ function parseInstruction(node: MethodDeclaration) {
 }
 
 function parseAccount(node: PropertyDeclaration) {
-  const account = {
+  const account: {
+    name: string;
+    fields: Record<string, string>;
+  } = {
     name: node.getName(),
     fields: {},
   };
