@@ -39,23 +39,23 @@ export const rustify = (anchorPrograms: Array<AnchorProgram>): string =>
             ];
           }),
           "}",
-          // ...Object.entries(program.instructions).flatMap(([k, v]) => {
-          //   let arr = v.decorators.flatMap((d) => parseDecorator(d));
-          //   if (arr.length === 0) {
-          //     arr = parse(v.block);
-          //   }
-          //   return [
-          //     "#[derive(Accounts)]",
-          //     `pub struct ${pascalCase(k)}${
-          //       v.decorators.length > 0 || String(v.block).includes("this.")
-          //         ? "<'info>"
-          //         : ""
-          //     } {`,
-          //     ...arr,
-          //     `}`,
-          //     "",
-          //   ];
-          // }),
+          ...Object.entries(anchorProgram.instructions).flatMap(([k, v]) => {
+            // let arr = v.decorators.flatMap((d) => parseDecorator(d));
+            // if (arr.length === 0) {
+            //   arr = parse(v.block);
+            // }
+            return [
+              "#[derive(Accounts)]",
+              `pub struct ${pascalCase(k)}${
+                v.decorators?.length > 0 || String(v.block).includes("this.")
+                  ? "<'info>"
+                  : ""
+              } {`,
+              // ...arr,
+              `}`,
+              "",
+            ];
+          }),
           ...Object.entries(anchorProgram.accounts)
             .filter(([, v]) => Object.keys(v).length > 0)
             .flatMap(([k, v]) => {
