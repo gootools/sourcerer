@@ -12,8 +12,16 @@
         }
       },
       "methods": {
-        "initialize": {},
-        "update": {}
+        "initialize": {
+          "params": {
+            "data": "U64"
+          }
+        },
+        "update": {
+          "params": {
+            "data": "U64"
+          }
+        }
       }
     },
     "anchorized": {
@@ -25,10 +33,16 @@
       },
       "instructions": {
         "initialize": {
-          "derived": "Initialize"
+          "params": {
+            "ctx": "Context<Initialize>",
+            "data": "u64"
+          }
         },
         "update": {
-          "derived": "Update"
+          "params": {
+            "ctx": "Context<Update>",
+            "data": "u64"
+          }
         }
       },
       "derived": {

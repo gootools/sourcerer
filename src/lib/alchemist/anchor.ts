@@ -19,7 +19,9 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
     name: snakeCase(program.name!),
     instructions: Object.entries(program.methods).reduce((acc, [k, v]) => {
       acc[snakeCase(k)] = {
-        derived: pascalCase(k),
+        params: {
+          _ctx: `Context<${pascalCase(k)}>`,
+        },
       };
       return acc;
     }, {} as AnchorProgram["instructions"]),

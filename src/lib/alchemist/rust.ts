@@ -12,17 +12,10 @@ export const rustify = (anchorPrograms: Array<AnchorProgram>): string =>
           "use super::*;",
           ...Object.entries(anchorProgram.instructions).flatMap(([k, v]) => {
             const params = Object.entries(v?.params ?? {})
-              .reduce(
-                (acc, [k, v]) => {
-                  acc.push(`${k}: ${v}`);
-                  return acc;
-                },
-                [
-                  `${
-                    v.block?.toString().includes("this.") ? "" : "_"
-                  }ctx: Context<${v.derived}>`,
-                ]
-              )
+              .reduce((acc, [k, v]) => {
+                acc.push(`${k}: ${v}`);
+                return acc;
+              }, [] as Array<string>)
               .join(", ");
 
             return [

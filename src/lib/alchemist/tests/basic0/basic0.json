@@ -12,7 +12,9 @@
       "accounts": {},
       "instructions": {
         "initialize": {
-          "derived": "Initialize"
+          "params": {
+            "_ctx": "Context<Initialize>"
+          }
         }
       },
       "derived": {
