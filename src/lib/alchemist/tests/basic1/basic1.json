@@ -38,13 +38,15 @@
           "params": {
             "ctx": "Context<Initialize>",
             "data": "u64"
-          }
+          },
+          "block": ["ctx.accounts.my_account.data = data;"]
         },
         "update": {
           "params": {
             "ctx": "Context<Update>",
             "data": "u64"
-          }
+          },
+          "block": ["ctx.accounts.my_account.data = data;"]
         }
       },
       "derived": {
