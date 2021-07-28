@@ -4,7 +4,13 @@ import { Program } from "./typescript";
 
 export interface AnchorProgram {
   name: string;
-  instructions: Record<string, any>;
+  instructions: Record<
+    string,
+    {
+      params: Record<string, string>;
+      block?: Array<string>;
+    }
+  >;
   derived: Record<string, any>;
   accounts: Record<string, Account>;
 }
@@ -18,6 +24,12 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
   programs.map((program) => ({
     name: snakeCase(program.name!),
     instructions: Object.entries(program.methods).reduce((acc, [k, v]) => {
+      const block =
+        v.block?.map((b) => {
+          const [, _ctx, accountName, rest] = b.match(/(this)\.(\w+)\.?(.*)/)!;
+          return ["ctx.accounts", snakeCase(accountName), rest].join(".");
+        }) ?? undefined;
+
       acc[snakeCase(k)] = {
         params: {
           [v.block?.toString().includes("this.")
@@ -28,6 +40,7 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
             return acc;
           }, {} as Record<string, string>),
         },
+        block,
       };
       return acc;
     }, {} as AnchorProgram["instructions"]),

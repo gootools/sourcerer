@@ -8,7 +8,7 @@ import { parse } from "../typescript";
 
 glob
   .sync("src/**/*.rs")
-  .slice(0, 2)
+  .slice(1, 2)
   .forEach((rustFilePath) => {
     describe(basename(rustFilePath), () => {
       const json = pipe(
@@ -29,6 +29,9 @@ glob
       });
 
       test("rustify", () => {
+        console.log(pipe(anchorified, rustify)(rustFilePath));
+        console.log(pipe(readFileSync, toString)(rustFilePath));
+
         expect(rustified(rustFilePath)).toEqual(
           pipe(readFileSync, toString, stripWhitespace)(rustFilePath)
         );

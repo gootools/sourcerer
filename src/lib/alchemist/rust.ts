@@ -21,15 +21,13 @@ export const rustify = (anchorPrograms: Array<AnchorProgram>): string =>
             return [
               "",
               `pub fn ${k}(${params}) -> ProgramResult {`,
-              // ...v.block.map((b) => {
-              //   const [, _ctx, accountName, rest] = b.match(/(this)\.(\w+)\.?(.*)/);
-              //   return ["ctx.accounts", snakeCase(accountName), rest].join(".");
-              // }),
+              ...(v.block ?? []),
               "Ok(())",
               `}`,
             ];
           }),
           "}",
+          "",
           ...Object.entries(anchorProgram.derived).flatMap(([k, v]) => {
             // let arr = v.decorators.flatMap((d) => parseDecorator(d));
             // if (arr.length === 0) {
@@ -58,6 +56,6 @@ export const rustify = (anchorPrograms: Array<AnchorProgram>): string =>
               return [`#[account]`, `pub struct ${k} {`, ...fields, `}`, ""];
             }),
         ]),
-      ["use anchor_lang::prelude::*;", "#[program]"]
+      ["use anchor_lang::prelude::*;", "", "#[program]"]
     )
     .join("\n");
