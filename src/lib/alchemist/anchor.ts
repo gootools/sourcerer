@@ -1,7 +1,7 @@
 import capitalize from "just-capitalize";
 import pascalCase from "just-pascal-case";
 import snakeCase from "just-snake-case";
-import { Program } from "./parse";
+import { Program } from "./typescript";
 
 export interface AnchorProgram {
   name: string;
@@ -15,7 +15,7 @@ type Account = Record<string, string>;
 /**
  * Converts an array of parsed Programs into an array of AnchorPrograms
  */
-const anchorize = (programs: Array<Program>): Array<AnchorProgram> =>
+export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
   programs.map((program) => ({
     name: snakeCase(program.name!),
     instructions: Object.entries(program.methods).reduce((acc, [k, v]) => {
@@ -34,5 +34,3 @@ const anchorize = (programs: Array<Program>): Array<AnchorProgram> =>
       return acc;
     }, {} as AnchorProgram["accounts"]),
   }));
-
-export default anchorize;

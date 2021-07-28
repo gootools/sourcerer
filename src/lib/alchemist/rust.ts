@@ -1,19 +1,18 @@
 import pascalCase from "just-pascal-case";
 import snakeCase from "just-snake-case";
-import { AnchorProgram } from "./anchorize";
+import { AnchorProgram } from "./anchor";
 
 /**
  * Serializes an AnchorProgram into Rust code
  */
-const rustify = (programs: Array<AnchorProgram>): string =>
-  programs
+export const rustify = (anchorPrograms: Array<AnchorProgram>): string =>
+  anchorPrograms
     .reduce(
-      (acc, program) =>
+      (acc, anchorProgram) =>
         acc.concat([
-          `mod ${program.name} {`,
+          `mod ${anchorProgram.name} {`,
           "use super::*;",
-          "}",
-          ...Object.entries(program.instructions).flatMap(([k, v]) => {
+          ...Object.entries(anchorProgram.instructions).flatMap(([k, v]) => {
             const params = Object.entries(v?.params ?? {})
               .reduce(
                 (acc, [k, v]) => {
@@ -39,6 +38,7 @@ const rustify = (programs: Array<AnchorProgram>): string =>
               `}`,
             ];
           }),
+          "}",
           // ...Object.entries(program.instructions).flatMap(([k, v]) => {
           //   let arr = v.decorators.flatMap((d) => parseDecorator(d));
           //   if (arr.length === 0) {
@@ -56,7 +56,7 @@ const rustify = (programs: Array<AnchorProgram>): string =>
           //     "",
           //   ];
           // }),
-          ...Object.entries(program.accounts)
+          ...Object.entries(anchorProgram.accounts)
             .filter(([, v]) => Object.keys(v).length > 0)
             .flatMap(([k, v]) => {
               const fields = Object.entries(v).reduce((acc, [k, v]) => {
@@ -85,5 +85,3 @@ const convertType = (tsType: string) => {
       return tsType.toLowerCase();
   }
 };
-
-export default rustify;

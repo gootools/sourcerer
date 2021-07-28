@@ -14,7 +14,7 @@ export interface Program {
 /**
  * Parses raw typescript into a Program interface
  */
-const parse = (ts: string): Array<Program> => {
+export const parse = (ts: string): Array<Program> => {
   const project = new Project({ useInMemoryFileSystem: true });
   project.createSourceFile("program.ts", ts);
 
@@ -82,5 +82,3 @@ const parseAccount = (node: PropertyDeclaration): [string, Property] => {
 
   return [node.getName(), account];
 };
-
-export default parse;
