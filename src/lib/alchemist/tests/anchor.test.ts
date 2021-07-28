@@ -8,9 +8,9 @@ import { parse } from "../typescript";
 
 glob
   .sync("src/**/*.rs")
-  .slice(0, 1)
+  .slice(1, 2)
   .forEach((rustFilePath) => {
-    test(basename(rustFilePath), () => {
+    describe(basename(rustFilePath), () => {
       const json = pipe(
         replace(".rs", ".json"),
         readFileSync,
@@ -18,15 +18,21 @@ glob
         JSON.parse
       )(rustFilePath);
 
-      expect(parsed(rustFilePath)).toEqual(json.map((x: any) => x.parsed));
+      test("parse", () => {
+        expect(parsed(rustFilePath)).toEqual(json.map((x: any) => x.parsed));
+      });
 
-      expect(anchorified(rustFilePath)).toEqual(
-        json.map((x: any) => x.anchorized)
-      );
+      test("anchorify", () => {
+        expect(anchorified(rustFilePath)).toEqual(
+          json.map((x: any) => x.anchorized)
+        );
+      });
 
-      expect(rustified(rustFilePath)).toEqual(
-        pipe(readFileSync, toString, stripWhitespace)(rustFilePath)
-      );
+      test("rustify", () => {
+        expect(rustified(rustFilePath)).toEqual(
+          pipe(readFileSync, toString, stripWhitespace)(rustFilePath)
+        );
+      });
     });
   });
 

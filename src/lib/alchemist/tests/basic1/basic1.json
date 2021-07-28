@@ -2,14 +2,16 @@
   {
     "parsed": {
       "name": "Basic_1",
-      "accounts": {
+      "properties": {
         "myAccount": {
           "type": {
-            "data": "U64"
+            "data": {
+              "type": "U64"
+            }
           }
         }
       },
-      "instructions": {
+      "methods": {
         "initialize": {},
         "update": {}
       }
@@ -18,14 +20,16 @@
       "name": "basic_1",
       "accounts": {
         "MyAccount": {
-          "type": {
-            "data": "u64"
-          }
+          "data": "u64"
         }
       },
       "instructions": {
-        "initialize": {},
-        "update": {}
+        "initialize": {
+          "derived": "Initialize"
+        },
+        "update": {
+          "derived": "Update"
+        }
       },
       "derived": {
         "Initialize": {},

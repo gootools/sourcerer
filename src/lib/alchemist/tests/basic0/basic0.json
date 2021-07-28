@@ -11,7 +11,9 @@
       "name": "basic_0",
       "accounts": {},
       "instructions": {
-        "initialize": {}
+        "initialize": {
+          "derived": "Initialize"
+        }
       },
       "derived": {
         "Initialize": {}

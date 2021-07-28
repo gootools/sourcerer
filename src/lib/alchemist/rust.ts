@@ -1,5 +1,3 @@
-import pascalCase from "just-pascal-case";
-import snakeCase from "just-snake-case";
 import { AnchorProgram } from "./anchor";
 
 /**
@@ -16,20 +14,20 @@ export const rustify = (anchorPrograms: Array<AnchorProgram>): string =>
             const params = Object.entries(v?.params ?? {})
               .reduce(
                 (acc, [k, v]) => {
-                  acc.push(`${k}: ${convertType(String(v))}`);
+                  acc.push(`${k}: ${v}`);
                   return acc;
                 },
                 [
                   `${
                     v.block?.toString().includes("this.") ? "" : "_"
-                  }ctx: Context<${pascalCase(k)}>`,
+                  }ctx: Context<${v.derived}>`,
                 ]
               )
               .join(", ");
 
             return [
               "",
-              `pub fn ${snakeCase(k)}(${params}) -> ProgramResult {`,
+              `pub fn ${k}(${params}) -> ProgramResult {`,
               // ...v.block.map((b) => {
               //   const [, _ctx, accountName, rest] = b.match(/(this)\.(\w+)\.?(.*)/);
               //   return ["ctx.accounts", snakeCase(accountName), rest].join(".");
@@ -39,14 +37,14 @@ export const rustify = (anchorPrograms: Array<AnchorProgram>): string =>
             ];
           }),
           "}",
-          ...Object.entries(anchorProgram.instructions).flatMap(([k, v]) => {
+          ...Object.entries(anchorProgram.derived).flatMap(([k, v]) => {
             // let arr = v.decorators.flatMap((d) => parseDecorator(d));
             // if (arr.length === 0) {
             //   arr = parse(v.block);
             // }
             return [
               "#[derive(Accounts)]",
-              `pub struct ${pascalCase(k)}${
+              `pub struct ${k}${
                 v.decorators?.length > 0 || String(v.block).includes("this.")
                   ? "<'info>"
                   : ""
@@ -60,28 +58,13 @@ export const rustify = (anchorPrograms: Array<AnchorProgram>): string =>
             .filter(([, v]) => Object.keys(v).length > 0)
             .flatMap(([k, v]) => {
               const fields = Object.entries(v).reduce((acc, [k, v]) => {
-                acc.push(`pub ${snakeCase(k)}: ${convertType(v)},`);
+                acc.push(`pub ${k}: ${v},`);
                 return acc;
               }, [] as string[]);
 
-              return [
-                `#[account]`,
-                `pub struct ${pascalCase(k)} {`,
-                ...fields,
-                `}`,
-                "",
-              ];
+              return [`#[account]`, `pub struct ${k} {`, ...fields, `}`, ""];
             }),
         ]),
       ["use anchor_lang::prelude::*;", "#[program]"]
     )
     .join("\n");
-
-const convertType = (tsType: string) => {
-  switch (tsType) {
-    case "Pubkey":
-      return "Pubkey";
-    default:
-      return tsType.toLowerCase();
-  }
-};
