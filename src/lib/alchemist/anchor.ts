@@ -53,14 +53,18 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
         ...(v.decorators ?? []).flatMap(parseDecorator),
       ];
 
-      Object.entries(program.properties).forEach(([k, v]) => {
-        Object.keys(v.type).forEach((key) => {
-          if (v.decorators?.includes(`@hasOne("${key}")`)) {
-            list.push("#[account(signer)]");
-            list.push(`pub ${key}: AccountInfo<'info>,`);
-          }
+      const idx = list.findIndex((x) => x === "#[account(mut)]");
+      if (idx >= 0) {
+        Object.entries(program.properties).forEach(([k, v]) => {
+          Object.keys(v.type).forEach((key) => {
+            if (v.decorators?.includes(`@hasOne("${key}")`)) {
+              list[idx] = `#[account(mut, has_one = ${key})]`;
+              list.push("#[account(signer)]");
+              list.push(`pub ${key}: AccountInfo<'info>,`);
+            }
+          });
         });
-      });
+      }
 
       acc[key] = list;
       return acc;

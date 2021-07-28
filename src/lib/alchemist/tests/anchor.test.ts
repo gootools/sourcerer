@@ -8,7 +8,7 @@ import { parse } from "../typescript";
 
 glob
   .sync("src/**/*.rs")
-  .slice(2, 3)
+  .slice(0, 3)
   .forEach((rustFilePath) => {
     describe(basename(rustFilePath), () => {
       const json = pipe(
