@@ -1,0 +1,36 @@
+[
+  {
+    "parsed": {
+      "name": "Basic_1",
+      "accounts": {
+        "myAccount": {
+          "type": {
+            "data": "U64"
+          }
+        }
+      },
+      "instructions": {
+        "initialize": {},
+        "update": {}
+      }
+    },
+    "anchorized": {
+      "name": "basic_1",
+      "accounts": {
+        "MyAccount": {
+          "type": {
+            "data": "u64"
+          }
+        }
+      },
+      "instructions": {
+        "initialize": {},
+        "update": {}
+      },
+      "derived": {
+        "Initialize": {},
+        "Update": {}
+      }
+    }
+  }
+]

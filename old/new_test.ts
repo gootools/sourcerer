@@ -1,6 +1,6 @@
-import { anchorize } from "./anchorize";
-import newParse from "./newParse";
-import { rustify } from "./rustify";
+import anchorize from "../anchorize";
+import parse from "../parse";
+import rustify from "../rustify";
 
 const ts = `export class Basic2 {
   @hasOne("authority")
@@ -20,8 +20,8 @@ const ts = `export class Basic2 {
   }
 }`;
 
-test("newParse", () => {
-  expect(newParse(ts)).toEqual({
+test("parse", () => {
+  expect(parse(ts)).toEqual({
     name: "Basic2",
     accounts: {
       counter: {
@@ -43,7 +43,7 @@ test("newParse", () => {
 });
 
 test("anchorize", () => {
-  expect(anchorize(newParse(ts))).toEqual({
+  expect(anchorize(parse(ts))).toEqual({
     name: "basic_2",
     instructions: {
       create: {

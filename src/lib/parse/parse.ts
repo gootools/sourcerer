@@ -1,105 +1,66 @@
-import {
-  MethodDeclaration,
-  Node,
-  Project,
-  PropertyDeclaration,
-} from "ts-morph";
+import { Node, Project, PropertyDeclaration, SyntaxKind } from "ts-morph";
 
+type PropertyType = "string" | Record<string, { type: PropertyType }>;
+interface Property {
+  type: PropertyType;
+  constraints?: Array<string>;
+}
 export interface Program {
   name?: string;
-  accounts: any;
-  instructions: any;
+  properties: Record<string, Property>;
+  methods: Record<string, any>;
 }
 
-const parse = (data: string): Program => {
+const parse = (ts: string): Array<Program> => {
   const project = new Project({ useInMemoryFileSystem: true });
-  project.createSourceFile("program.ts", data);
+  project.createSourceFile("program.ts", ts);
 
-  const program: Program = {
-    accounts: {},
-    instructions: {},
-  };
+  const programs: Array<Program> = [];
 
   const sourceFile = project.getSourceFileOrThrow("program.ts");
-  sourceFile
-    .getClasses()
-    .slice(0, 1)
-    .forEach((klass) => {
-      program.name = klass.getName();
+  sourceFile.getClasses().forEach((klass) => {
+    const program: Program = {
+      name: klass.getName(),
+      properties: {},
+      methods: {},
+    };
 
-      klass.forEachChild((node) => {
-        if (Node.isPropertyDeclaration(node)) {
-          const { name, fields } = parseAccount(node);
-          program.accounts[name] = fields;
-        } else if (Node.isMethodDeclaration(node)) {
-          const { name, params, decorators, block } = parseInstruction(node);
-          program.instructions[name] = { params, decorators, block };
-        } else {
-          // try {
-          //   console.log(node.getText());
-          // } catch (err) {}
-        }
-      });
+    programs.push(program);
+
+    klass.forEachChild((node) => {
+      if (Node.isPropertyDeclaration(node)) {
+        const [name, account] = parseAccount(node);
+        program.properties[name] = account;
+      } else if (Node.isMethodDeclaration(node)) {
+        program.methods[node.getName()] = {};
+      }
     });
+  });
 
-  return program;
+  return programs;
 };
 
-export default parse;
-
-function parseInstruction(node: MethodDeclaration) {
-  const instruction: {
-    name: string;
-    params: Record<string, any>;
-    decorators: string[];
-    block: string[];
-  } = {
-    name: node.getName(),
-    params: {},
-    decorators: [],
-    block: [],
+const parseAccount = (node: PropertyDeclaration): [string, Property] => {
+  const account: Property = {
+    type: {},
   };
 
   node.forEachChild((node) => {
     if (Node.isDecorator(node)) {
-      // switch (node.getName()) {
-      //   case "init":
-      //   // console.log(node.getText());
-      //   case "signer":
-      // }
-      instruction.decorators.push(node.getText());
-    } else if (Node.isParameterDeclaration(node)) {
-      const [name, type] = node
-        .getText()
-        .split(":")
-        .map((x) => x.trim())
-        .filter(Boolean);
-      instruction.params[name] = type;
-    } else if (node.getKindName() === "Block") {
-      // console.log(node.getChildren().map((x) => x.getText()));
-      node.forEachChild((n) =>
-        n
-          .getText()
-          .split("\n")
-          .forEach((x) => instruction.block.push(x))
-      );
-    }
-  });
-  // console.log(instruction.block);
-  return instruction;
-}
+      const constraint = node
+        .getFirstDescendantByKind(SyntaxKind.Identifier)
+        ?.getText();
 
-function parseAccount(node: PropertyDeclaration) {
-  const account: {
-    name: string;
-    fields: Record<string, string>;
-  } = {
-    name: node.getName(),
-    fields: {},
-  };
+      const property = node
+        .getFirstDescendantByKind(SyntaxKind.StringLiteral)
+        ?.getText();
 
-  node.forEachChild((node) => {
-    if (Node.isTypeLiteralNode(node)) {
+      if (property && constraint) {
+        (account.type as any)[JSON.parse(property)] = {
+          constraints: [constraint],
+        };
+      }
+    } else if (Node.isTypeLiteralNode(node)) {
       node.forEachChild((node) => {
         const [name, type] = node
           .getText()
@@ -107,9 +68,16 @@ function parseAccount(node: PropertyDeclaration) {
           .shift()!
           .split(":")
           .map((x) => x.trim());
-        account.fields[name] = type;
+
+        (account.type as any)[name] = {
+          ...((account.type as any)[name] ?? {}),
+          type,
+        };
       });
     }
   });
-  return account;
-}
+
+  return [node.getName(), account];
+};
+
+export default parse;

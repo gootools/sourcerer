@@ -1,15 +1,17 @@
 import capitalize from "just-capitalize";
 import snakeCase from "just-snake-case";
-import { Program } from "./newParse";
+import { Program } from "./parse";
 
 export interface AnchorProgram {
   name: string;
   instructions: {};
   derived: {};
-  accounts: Record<string, Record<string, string>>;
+  accounts: Record<string, Account>;
 }
 
-export const anchorize = (program: Program) => {
+type Account = Record<string, string>;
+
+const anchorize = (program: Program) => {
   return {
     name: snakeCase(program.name!),
     instructions: {},
@@ -23,3 +25,5 @@ export const anchorize = (program: Program) => {
     }, {} as AnchorProgram["accounts"]),
   };
 };
+
+export default anchorize;

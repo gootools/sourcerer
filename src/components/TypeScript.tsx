@@ -75,12 +75,12 @@ function TypeScript({ setRust }: { setRust: any }) {
   return (
     <Editor
       beforeMount={handleEditorWillMount}
+      defaultLanguage="typescript"
+      defaultValue={defaultValue}
       onChange={(value) => {
         if (value) worker.postMessage(value);
       }}
       onMount={handleEditorDidMount}
-      defaultLanguage="typescript"
-      defaultValue={defaultValue}
     />
   );
 }

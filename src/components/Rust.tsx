@@ -28,6 +28,7 @@ function Rust({ rust }: { rust: string }) {
 
   return (
     <Editor
+      defaultLanguage="rust"
       options={{
         fontSize: 19,
         lineHeight: 28,
@@ -37,7 +38,6 @@ function Rust({ rust }: { rust: string }) {
         },
         readOnly: true,
       }}
-      defaultLanguage="rust"
       value={rust}
     />
   );

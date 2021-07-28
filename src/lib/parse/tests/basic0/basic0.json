@@ -1,0 +1,20 @@
+[
+  {
+    "parsed": {
+      "name": "Basic_0",
+      "properties": {},
+      "methods": {
+        "initialize": {}
+      }
+    },
+    "anchorized": {
+      "name": "basic_0",
+      "instructions": {
+        "initialize": {}
+      },
+      "derived": {
+        "Initialize": {}
+      }
+    }
+  }
+]
