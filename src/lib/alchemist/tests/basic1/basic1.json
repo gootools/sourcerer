@@ -13,12 +13,14 @@
       },
       "methods": {
         "initialize": {
+          "decorators": ["@init(\"myAccount\")"],
           "params": {
             "data": "U64"
           },
           "block": ["this.myAccount.data = data;"]
         },
         "update": {
+          "decorators": ["@mut(\"myAccount\")"],
           "params": {
             "data": "U64"
           },
@@ -50,8 +52,15 @@
         }
       },
       "derived": {
-        "Initialize": {},
-        "Update": {}
+        "Initialize<'info>": [
+          "#[account(init)]",
+          "pub my_account: ProgramAccount<'info, MyAccount>,",
+          "pub rent: Sysvar<'info, Rent>,"
+        ],
+        "Update<'info>": [
+          "#[account(mut)]",
+          "pub my_account: ProgramAccount<'info, MyAccount>,"
+        ]
       }
     }
   }

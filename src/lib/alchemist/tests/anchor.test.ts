@@ -29,9 +29,8 @@ glob
       });
 
       test("rustify", () => {
-        console.log(pipe(anchorified, rustify)(rustFilePath));
-        console.log(pipe(readFileSync, toString)(rustFilePath));
-
+        // console.log(pipe(anchorified, rustify)(rustFilePath));
+        // console.log(pipe(readFileSync, toString)(rustFilePath));
         expect(rustified(rustFilePath)).toEqual(
           pipe(readFileSync, toString, stripWhitespace)(rustFilePath)
         );

@@ -12,6 +12,7 @@ export interface Program {
   methods: Record<
     string,
     {
+      decorators?: Array<string>;
       params?: Record<string, string>;
       block?: Array<string>;
     }
@@ -40,6 +41,12 @@ export const parse = (ts: string): Array<Program> => {
         const block =
           node.getBodyText()?.split("\n").map(trim).filter(Boolean) ?? [];
 
+        const decorators =
+          node
+            .getDecorators()
+            .map((d) => trim(d.getText()))
+            .filter(Boolean) ?? [];
+
         const params = node.getParameters().reduce((acc, curr) => {
           const [name, type] = curr.getText().split(":").map(trim);
           acc[name] = type;
@@ -49,6 +56,7 @@ export const parse = (ts: string): Array<Program> => {
         program.methods[node.getName()] = {
           params: Object.keys(params).length > 0 ? params : undefined,
           block: block.length > 0 ? block : undefined,
+          decorators: decorators.length > 0 ? decorators : undefined,
         };
       }
     });

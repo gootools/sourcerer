@@ -11,7 +11,7 @@ export interface AnchorProgram {
       block?: Array<string>;
     }
   >;
-  derived: Record<string, any>;
+  derived: Record<string, Array<string>>;
   accounts: Record<string, Account>;
 }
 
@@ -23,6 +23,7 @@ type Account = Record<string, string>;
 export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
   programs.map((program) => ({
     name: snakeCase(program.name!),
+
     instructions: Object.entries(program.methods).reduce((acc, [k, v]) => {
       const block =
         v.block?.map((b) => {
@@ -44,10 +45,18 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
       };
       return acc;
     }, {} as AnchorProgram["instructions"]),
+
     derived: Object.entries(program.methods).reduce((acc, [k, v]) => {
-      acc[pascalCase(k)] = {};
+      let key = pascalCase(k);
+      if (v.block?.toString().includes("this.")) key = key.concat("<'info>");
+      const list: Array<string> = [
+        ...(v.decorators ?? []).flatMap(parseDecorator),
+      ];
+
+      acc[key] = list;
       return acc;
     }, {} as AnchorProgram["derived"]),
+
     accounts: Object.entries(program.properties).reduce((acc, [k, v]) => {
       acc[pascalCase(k)] = Object.entries(v.type).reduce((acc, [k, v]) => {
         acc[k] = convertType(v.type);
@@ -65,3 +74,49 @@ const convertType = (tsType: string) => {
       return tsType.toLowerCase();
   }
 };
+
+function parseDecorator(d: string) {
+  let match = d.match(/@init\("(.+)"\)/);
+  if (match?.[1]) {
+    return [
+      "#[account(init)]",
+      `pub ${snakeCase(match[1])}: ProgramAccount<'info, ${pascalCase(
+        match[1]
+      )}>,`,
+      `pub rent: Sysvar<'info, Rent>,`,
+    ];
+  }
+  match = d.match(/@signer\("(.+)"\)/);
+  if (match?.[1]) {
+    return ["#[account(signer)]", `pub ${match[1]}: AccountInfo<'info>,`];
+  }
+
+  try {
+    match = d.match(/@mut\(([^)]+)\)/m);
+    if (match?.[1]) {
+      const [account, stuff = {}] = eval(`[${match[1]}]`);
+
+      const parts = Object.entries(stuff)
+        .reduce(
+          (acc, [k, v]) => {
+            acc.push([snakeCase(k), v].join(" = "));
+            return acc;
+          },
+          ["mut"]
+        )
+        .join(", ");
+
+      return [
+        `#[account(${parts})]`,
+        `pub ${snakeCase(account)}: ProgramAccount<'info, ${pascalCase(
+          account
+        )}>,`,
+      ];
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  return [];
+  // return [`// ${d}`];
+}

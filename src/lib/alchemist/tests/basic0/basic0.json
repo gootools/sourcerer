@@ -18,7 +18,7 @@
         }
       },
       "derived": {
-        "Initialize": {}
+        "Initialize": []
       }
     }
   }

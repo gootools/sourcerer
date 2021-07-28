@@ -1,4 +1,4 @@
-import { init } from "sourcerer";
+import { init, mut } from "sourcerer";
 
 export class Basic_1 {
   myAccount: {
@@ -10,6 +10,7 @@ export class Basic_1 {
     this.myAccount.data = data;
   }
 
+  @mut("myAccount")
   update(data: U64) {
     this.myAccount.data = data;
   }

@@ -29,21 +29,7 @@ export const rustify = (anchorPrograms: Array<AnchorProgram>): string =>
           "}",
           "",
           ...Object.entries(anchorProgram.derived).flatMap(([k, v]) => {
-            // let arr = v.decorators.flatMap((d) => parseDecorator(d));
-            // if (arr.length === 0) {
-            //   arr = parse(v.block);
-            // }
-            return [
-              "#[derive(Accounts)]",
-              `pub struct ${k}${
-                v.decorators?.length > 0 || String(v.block).includes("this.")
-                  ? "<'info>"
-                  : ""
-              } {`,
-              // ...arr,
-              `}`,
-              "",
-            ];
+            return ["#[derive(Accounts)]", `pub struct ${k} {`, ...v, `}`, ""];
           }),
           ...Object.entries(anchorProgram.accounts)
             .filter(([, v]) => Object.keys(v).length > 0)
