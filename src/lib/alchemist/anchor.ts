@@ -20,7 +20,13 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
     instructions: Object.entries(program.methods).reduce((acc, [k, v]) => {
       acc[snakeCase(k)] = {
         params: {
-          _ctx: `Context<${pascalCase(k)}>`,
+          [v.block?.toString().includes("this.")
+            ? "ctx"
+            : "_ctx"]: `Context<${pascalCase(k)}>`,
+          ...Object.entries(v.params ?? {}).reduce((acc, [k, v]) => {
+            acc[k] = convertType(v);
+            return acc;
+          }, {} as Record<string, string>),
         },
       };
       return acc;

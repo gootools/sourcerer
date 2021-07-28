@@ -1,3 +1,4 @@
+import { trim } from "rambda";
 import { Node, Project, PropertyDeclaration, SyntaxKind } from "ts-morph";
 
 type PropertyType = "string" | Record<string, { type: PropertyType }>;
@@ -8,7 +9,13 @@ interface Property {
 export interface Program {
   name?: string;
   properties: Record<string, Property>;
-  methods: Record<string, any>;
+  methods: Record<
+    string,
+    {
+      params?: Record<string, string>;
+      block?: Array<string>;
+    }
+  >;
 }
 
 /**
@@ -30,7 +37,19 @@ export const parse = (ts: string): Array<Program> => {
         const [name, account] = parseAccount(node);
         program.properties[name] = account;
       } else if (Node.isMethodDeclaration(node)) {
-        program.methods[node.getName()] = {};
+        const block =
+          node.getBodyText()?.split("\n").map(trim).filter(Boolean) ?? [];
+
+        const params = node.getParameters().reduce((acc, curr) => {
+          const [name, type] = curr.getText().split(":").map(trim);
+          acc[name] = type;
+          return acc;
+        }, {} as Record<string, string>);
+
+        program.methods[node.getName()] = {
+          params: Object.keys(params).length > 0 ? params : undefined,
+          block: block.length > 0 ? block : undefined,
+        };
       }
     });
 

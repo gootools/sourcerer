@@ -15,12 +15,14 @@
         "initialize": {
           "params": {
             "data": "U64"
-          }
+          },
+          "block": ["this.myAccount.data = data;"]
         },
         "update": {
           "params": {
             "data": "U64"
-          }
+          },
+          "block": ["this.myAccount.data = data;"]
         }
       }
     },
