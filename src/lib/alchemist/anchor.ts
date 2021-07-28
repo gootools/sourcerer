@@ -53,6 +53,15 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
         ...(v.decorators ?? []).flatMap(parseDecorator),
       ];
 
+      Object.entries(program.properties).forEach(([k, v]) => {
+        Object.keys(v.type).forEach((key) => {
+          if (v.decorators?.includes(`@hasOne("${key}")`)) {
+            list.push("#[account(signer)]");
+            list.push(`pub ${key}: AccountInfo<'info>,`);
+          }
+        });
+      });
+
       acc[key] = list;
       return acc;
     }, {} as AnchorProgram["derived"]),

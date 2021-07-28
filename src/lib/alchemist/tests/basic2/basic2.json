@@ -1,0 +1,76 @@
+[
+  {
+    "parsed": {
+      "name": "Basic_2",
+      "properties": {
+        "counter": {
+          "decorators": ["@hasOne(\"authority\")"],
+          "type": {
+            "authority": {
+              "type": "Pubkey"
+            },
+            "count": {
+              "type": "U64"
+            }
+          }
+        }
+      },
+      "methods": {
+        "create": {
+          "decorators": ["@init(\"counter\")"],
+          "params": {
+            "authority": "Pubkey"
+          },
+          "block": [
+            "this.counter.count = 0;",
+            "this.counter.authority = authority;"
+          ]
+        },
+        "increment": {
+          "decorators": ["@mut(\"counter\")"],
+          "block": ["this.counter.count += 1;"]
+        }
+      }
+    },
+    "anchorized": {
+      "name": "basic_2",
+      "accounts": {
+        "Counter": {
+          "authority": "Pubkey",
+          "count": "u64"
+        }
+      },
+      "instructions": {
+        "create": {
+          "params": {
+            "ctx": "Context<Create>",
+            "authority": "Pubkey"
+          },
+          "block": [
+            "ctx.accounts.counter.count = 0;",
+            "ctx.accounts.counter.authority = authority;"
+          ]
+        },
+        "increment": {
+          "params": {
+            "ctx": "Context<Increment>"
+          },
+          "block": ["ctx.accounts.counter.count += 1;"]
+        }
+      },
+      "derived": {
+        "Create<'info>": [
+          "#[account(init)]",
+          "pub counter: ProgramAccount<'info, Counter>,",
+          "pub rent: Sysvar<'info, Rent>,"
+        ],
+        "Increment<'info>": [
+          "#[account(mut, has_one = authority)]",
+          "pub counter: ProgramAccount<'info, Counter>,",
+          "#[account(signer)]",
+          "pub authority: AccountInfo<'info>,"
+        ]
+      }
+    }
+  }
+]

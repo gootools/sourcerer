@@ -1,4 +1,4 @@
-import { hasOne } from "sourcerer";
+import { hasOne, init, mut } from "sourcerer";
 
 export class Basic_2 {
   @hasOne("authority")
@@ -7,15 +7,13 @@ export class Basic_2 {
     count: U64;
   };
 
-  // @init("counter")
+  @init("counter")
   create(authority: Pubkey) {
-    this.counter = {
-      count: 0,
-      authority,
-    };
+    this.counter.count = 0;
+    this.counter.authority = authority;
   }
 
-  // @mut("counter")
+  @mut("counter")
   increment() {
     this.counter.count += 1;
   }
