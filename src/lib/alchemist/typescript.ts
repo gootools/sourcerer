@@ -16,19 +16,14 @@ export interface Program {
  */
 export const parse = (ts: string): Array<Program> => {
   const project = new Project({ useInMemoryFileSystem: true });
-  project.createSourceFile("program.ts", ts);
+  const sourceFile = project.createSourceFile("program.ts", ts);
 
-  const programs: Array<Program> = [];
-
-  const sourceFile = project.getSourceFileOrThrow("program.ts");
-  sourceFile.getClasses().forEach((klass) => {
+  return sourceFile.getClasses().map((klass) => {
     const program: Program = {
       name: klass.getName(),
       properties: {},
       methods: {},
     };
-
-    programs.push(program);
 
     klass.forEachChild((node) => {
       if (Node.isPropertyDeclaration(node)) {
@@ -38,9 +33,9 @@ export const parse = (ts: string): Array<Program> => {
         program.methods[node.getName()] = {};
       }
     });
-  });
 
-  return programs;
+    return program;
+  });
 };
 
 const parseAccount = (node: PropertyDeclaration): [string, Property] => {
