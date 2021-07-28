@@ -1,8 +1,8 @@
 import { BeforeMount, OnMount } from "@monaco-editor/react";
 import { mergeDeepRight } from "rambda";
 import React, { useEffect, useMemo } from "react";
-import defaultValue from "../lib/parse/tests/basic1/basic1?raw";
-import Worker from "../lib/parse/worker.ts?worker";
+import defaultValue from "../lib/alchemist/tests/basic1/basic1?raw";
+import Worker from "../lib/alchemist/worker.ts?worker";
 import sourcerer from "../lib/sourcerer.ts?raw";
 import types from "../types.d.ts?raw";
 import Editor from "./shared/Editor";

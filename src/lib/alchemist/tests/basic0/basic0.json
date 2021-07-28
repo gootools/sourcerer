@@ -9,6 +9,7 @@
     },
     "anchorized": {
       "name": "basic_0",
+      "accounts": {},
       "instructions": {
         "initialize": {}
       },

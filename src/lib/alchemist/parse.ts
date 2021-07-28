@@ -11,6 +11,9 @@ export interface Program {
   methods: Record<string, any>;
 }
 
+/**
+ * Parses raw typescript into a Program interface
+ */
 const parse = (ts: string): Array<Program> => {
   const project = new Project({ useInMemoryFileSystem: true });
   project.createSourceFile("program.ts", ts);
