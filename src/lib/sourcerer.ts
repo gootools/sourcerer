@@ -1,4 +1,4 @@
-// import "reflect-metadata";
+import "reflect-metadata";
 
 /**
  * Initializes the account
@@ -72,4 +72,12 @@ export function hasOne(pubkey: string) {
 
 export class AnchorProgram {
   constructor(publicKey: Pubkey) {}
+}
+
+export function cpi(klass: Function) {
+  return function (
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {};
 }

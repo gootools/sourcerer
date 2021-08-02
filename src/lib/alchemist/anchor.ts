@@ -22,13 +22,15 @@ type Account = Record<string, string>;
  */
 export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
   programs.map((program) => ({
-    name: snakeCase(program.name!),
+    name: snakeCase(program.name || ""),
 
     instructions: Object.entries(program.methods).reduce((acc, [k, v]) => {
       const block =
         v.block?.map((b) => {
-          const [, _ctx, accountName, rest] = b.match(/(this)\.(\w+)\.?(.*)/)!;
-          return ["ctx.accounts", snakeCase(accountName), rest].join(".");
+          try {
+            const [, accountName, rest] = b.match(/^this\.(\w+)\.?(.*)/)!;
+            return ["ctx.accounts", snakeCase(accountName), rest].join(".");
+          } catch (err) {}
         }) ?? undefined;
 
       acc[snakeCase(k)] = {
@@ -36,8 +38,11 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
           [v.block?.toString().includes("this.")
             ? "ctx"
             : "_ctx"]: `Context<${pascalCase(k)}>`,
-          ...Object.entries(v.params ?? {}).reduce((acc, [k, v]) => {
-            acc[k] = convertType(v);
+          ...Object.entries(v.params ?? {}).reduce((acc, [k, v2]) => {
+            // v.block?.toString().includes(`this.${program.name}.${k}`)
+            //   ? k
+            //   : `_${k}`
+            acc[k] = convertType(v2);
             return acc;
           }, {} as Record<string, string>),
         },
@@ -70,13 +75,16 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
       return acc;
     }, {} as AnchorProgram["derived"]),
 
-    accounts: Object.entries(program.properties).reduce((acc, [k, v]) => {
-      acc[pascalCase(k)] = Object.entries(v.type).reduce((acc, [k, v]) => {
-        acc[k] = convertType(v.type);
+    accounts: Object.entries(program.properties)
+      .filter(([, v]) => typeof v.type !== "string")
+      .reduce((acc, [k, v]) => {
+        acc[pascalCase(k)] = Object.entries(v.type).reduce((acc, [k, v]) => {
+          acc[k.replaceAll("?", "")] = convertType(v.type);
+          return acc;
+        }, {} as Account);
+
         return acc;
-      }, {} as Account);
-      return acc;
-    }, {} as AnchorProgram["accounts"]),
+      }, {} as AnchorProgram["accounts"]),
   }));
 
 const convertType = (tsType: string) => {

@@ -1,16 +1,17 @@
-import { AnchorProgram, hasOne } from "sourcerer";
+import { init, mut } from "sourcerer";
 
-export class Puppet extends AnchorProgram {
-  @hasOne("authority")
-  puppet: {
+export class Puppet {
+  static puppet: {
     data?: U64;
   };
 
-  initialize() {
+  @init("puppet")
+  static initialize() {
     this.puppet = {};
   }
 
-  setData(data: U64) {
+  @mut("puppet")
+  static setData(data: U64) {
     this.puppet.data = data;
   }
 }

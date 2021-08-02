@@ -1,9 +1,9 @@
+import { cpi } from "sourcerer";
 import { Puppet } from "./puppet";
 
 export class PuppetMaster {
-  puppetProgram: Pubkey;
-
-  pullStrings(data: U64) {
-    new Puppet(this.puppetProgram).setData(data);
+  @cpi(Puppet)
+  static pullStrings(data: U64) {
+    Puppet.setData(data);
   }
 }

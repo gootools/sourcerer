@@ -73,8 +73,7 @@ const parseAccount = (node: PropertyDeclaration): [string, Property] => {
       .map((d) => trim(d.getText()))
       .filter(Boolean) ?? [];
 
-  const account: Property = {
-    type: {},
+  const account: any = {
     decorators: decorators.length > 0 ? decorators : undefined,
   };
 
@@ -100,11 +99,15 @@ const parseAccount = (node: PropertyDeclaration): [string, Property] => {
           .split(":")
           .map((x) => x.trim());
 
+        account.type ??= {};
+
         (account.type as any)[name] = {
           ...((account.type as any)[name] ?? {}),
           type,
         };
       });
+    } else if (Node.isTypeNode(node)) {
+      account.type = node.getText();
     }
   });
 
