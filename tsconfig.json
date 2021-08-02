@@ -15,6 +15,7 @@
     "noEmit": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "paths": {
       "sourcerer": ["lib/sourcerer"]
     },
@@ -22,6 +23,8 @@
     "skipLibCheck": false,
     "strict": true,
     "strictPropertyInitialization": false,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
     "target": "ESNext",
     "types": ["jest"]
   },
