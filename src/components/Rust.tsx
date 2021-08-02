@@ -15,12 +15,15 @@ window.wasm_bindgen(wasmUrl).then(() => {
   rustfmt = window.wasm_bindgen.rustfmt;
 });
 
-function Rust({
-  data: { anchor, rust },
-}: {
-  data: { anchor: any; rust: string };
-}) {
+export interface Data {
+  anchor: Array<any>;
+  rust: string;
+}
+
+function Rust({ data }: { data?: Data }) {
   const [tab, setTab] = useState(0);
+  let rust = data?.rust ?? "";
+  let anchor = data?.anchor ?? [];
 
   if (rustfmt) {
     const result = rustfmt(rust);
@@ -41,7 +44,7 @@ function Rust({
 
   return (
     <>
-      {Array.isArray(anchor) && anchor.length > 1 && (
+      {anchor.length > 1 && (
         <Tabs
           allowScrollButtonsMobile
           aria-label="tabs"

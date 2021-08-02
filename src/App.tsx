@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import type { Data } from "./components/Rust";
 import Rust from "./components/Rust";
 import TypeScript from "./components/TypeScript";
 
 const App = () => {
-  const [data, setData] = useState("");
+  const [data, setData] = useState<Data>();
 
   return (
     <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
