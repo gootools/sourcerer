@@ -66,8 +66,8 @@ export function mut(accountName: string, opts: MutOpts = {}) {
   ) {};
 }
 
-export function hasOne(formatString: string) {
-  return Reflect.metadata(Symbol("hasOne"), formatString);
+export function hasOne(pubkey: string) {
+  return Reflect.metadata(Symbol("hasOne"), pubkey);
 }
 
 export class AnchorProgram {
