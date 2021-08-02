@@ -49,7 +49,7 @@ function TypeScript({ setRust }: { setRust: any }) {
       emitDecoratorMetadata: true,
       experimentalDecorators: true,
       noImplicitAny: true,
-      noUnusedLocals: true,
+      noUnusedLocals: false,
       paths: {
         sourcerer: ["sourcerer.ts"],
       },
