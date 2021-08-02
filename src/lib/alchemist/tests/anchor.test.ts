@@ -6,37 +6,34 @@ import { anchorify } from "../anchor";
 import { rustify } from "../rust";
 import { parse } from "../typescript";
 
-glob
-  .sync("src/**/*.rs")
-  .slice(0, 3)
-  .forEach((rustFilePath) => {
-    describe(basename(rustFilePath), () => {
-      const json = pipe(
-        replace(".rs", ".json"),
-        readFileSync,
-        toString,
-        JSON.parse
-      )(rustFilePath);
+glob.sync("src/**/*.rs").forEach((rustFilePath) => {
+  describe(basename(rustFilePath), () => {
+    const json = pipe(
+      replace(".rs", ".json"),
+      readFileSync,
+      toString,
+      JSON.parse
+    )(rustFilePath);
 
-      test("parse", () => {
-        expect(parsed(rustFilePath)).toEqual(json.map((x: any) => x.parsed));
-      });
+    test("parse", () => {
+      expect(parsed(rustFilePath)).toEqual(json.map((x: any) => x.parsed));
+    });
 
-      test("anchorify", () => {
-        expect(anchorified(rustFilePath)).toEqual(
-          json.map((x: any) => x.anchorized)
-        );
-      });
+    test("anchorify", () => {
+      expect(anchorified(rustFilePath)).toEqual(
+        json.map((x: any) => x.anchorized)
+      );
+    });
 
-      test("rustify", () => {
-        // console.log(pipe(anchorified, rustify)(rustFilePath));
-        // console.log(pipe(readFileSync, toString)(rustFilePath));
-        expect(rustified(rustFilePath)).toEqual(
-          pipe(readFileSync, toString, stripWhitespace)(rustFilePath)
-        );
-      });
+    test("rustify", () => {
+      // console.log(pipe(anchorified, rustify)(rustFilePath));
+      // console.log(pipe(readFileSync, toString)(rustFilePath));
+      expect(rustified(rustFilePath)).toEqual(
+        pipe(readFileSync, toString, stripWhitespace)(rustFilePath)
+      );
     });
   });
+});
 
 const stripWhitespace = (body: string) => body.replace(/\s/g, "");
 
