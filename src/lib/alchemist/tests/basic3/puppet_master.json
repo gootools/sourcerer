@@ -12,7 +12,8 @@
           "params": {
             "data": "U64"
           },
-          "block": ["new Puppet(this.puppetProgram).setData(data);"]
+          "block": ["Puppet.setData(data);"],
+          "decorators": ["@cpi(Puppet)"]
         }
       }
     },
@@ -22,7 +23,7 @@
       "instructions": {
         "pull_strings": {
           "params": {
-            "ctx": "Context<PullStrings>",
+            "_ctx": "Context<PullStrings>",
             "data": "u64"
           },
           "block": [

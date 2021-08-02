@@ -60,7 +60,7 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
 
       const idx = list.findIndex((x) => x === "#[account(mut)]");
       if (idx >= 0) {
-        Object.entries(program.properties).forEach(([k, v]) => {
+        Object.values(program.properties).forEach((v) => {
           Object.keys(v.type).forEach((key) => {
             if (v.decorators?.includes(`@hasOne("${key}")`)) {
               list[idx] = `#[account(mut, has_one = ${key})]`;
