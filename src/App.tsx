@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import type { Data } from "./components/Rust";
 import Rust from "./components/Rust";
 import TypeScript from "./components/TypeScript";
+import "./lib/window";
 
 const App = () => {
   const [data, setData] = useState<Data>();

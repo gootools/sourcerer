@@ -1,16 +1,25 @@
 import { BeforeMount, OnMount } from "@monaco-editor/react";
 import { mergeDeepRight } from "rambda";
 import React, { useEffect, useMemo } from "react";
-import defaultValue from "../lib/alchemist/tests/basic3/cpi?raw";
+import fallbackDefaultValue from "../lib/alchemist/tests/basic3/cpi?raw";
 import Worker from "../lib/alchemist/worker.ts?worker";
 import sourcerer from "../lib/sourcerer.ts?raw";
 import types from "../types.d.ts?raw";
 import Editor from "./shared/Editor";
 
+const defaultValue: string = (() => {
+  try {
+    return atob(window.location.hash.split("#")[1]);
+  } catch (err) {
+    return fallbackDefaultValue;
+  }
+})();
+
 function TypeScript({ setRust }: { setRust: any }) {
   const worker = useMemo(() => new Worker(), []);
   useEffect(() => {
     const handleMessage = ({ data }: any) => {
+      if (data.encoded) window.replaceHash(data.encoded);
       setRust(data);
     };
     worker.addEventListener("message", handleMessage);
@@ -29,7 +38,9 @@ function TypeScript({ setRust }: { setRust: any }) {
     });
   };
 
-  const handleEditorDidMount: OnMount = (_editor, monaco) => {
+  const handleEditorDidMount: OnMount = (editor, monaco) => {
+    editor.getModel()?.updateOptions({ tabSize: 2 });
+
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
       types,
       "types.d.ts"

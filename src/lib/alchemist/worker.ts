@@ -8,8 +8,9 @@ import { parse } from "./typescript";
  * code into anchor and rust
  */
 self.onmessage = (e) => {
+  const encoded = btoa(e.data);
   const anchor = pipe(parse, anchorify)(e.data);
   const rust = rustify(anchor);
   // @ts-ignore
-  self.postMessage({ anchor, rust });
+  self.postMessage({ encoded, anchor, rust });
 };
