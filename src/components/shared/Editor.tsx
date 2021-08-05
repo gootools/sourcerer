@@ -9,7 +9,7 @@ const Editor = (props: EditorProps) => (
     {...props}
     options={mergeDeepRight(
       {
-        fontFamily: "JetBrains Mono",
+        fontFamily: "'JetBrains Mono', monospace",
         fontLigatures: true,
         fontSize: 19,
         fontWeight: "400",
