@@ -118,6 +118,7 @@ function parseDecorator(d: string) {
   try {
     match = d.match(/@mut\(([^)]+)\)/m);
     if (match?.[1]) {
+      // TODO: don't eval!
       const [account, stuff = {}] = eval(`[${match[1]}]`);
 
       const parts = Object.entries(stuff)
