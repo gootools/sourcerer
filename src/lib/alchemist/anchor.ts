@@ -2,13 +2,15 @@ import pascalCase from "just-pascal-case";
 import snakeCase from "just-snake-case";
 import { Program } from "./typescript";
 
+type Block = Array<string>;
+
 export interface AnchorProgram {
   name: string;
   instructions: Record<
     string,
     {
       params: Record<string, string>;
-      block?: Array<string>;
+      block?: Block;
     }
   >;
   derived: Record<string, Array<string>>;
@@ -25,13 +27,14 @@ export const anchorify = (programs: Array<Program>): Array<AnchorProgram> =>
     name: snakeCase(program.name || ""),
 
     instructions: Object.entries(program.methods).reduce((acc, [k, v]) => {
-      const block =
-        v.block?.map((b) => {
+      const block = v.block
+        ?.map((b) => {
           try {
             const [, accountName, rest] = b.match(/^this\.(\w+)\.?(.*)/)!;
             return ["ctx.accounts", snakeCase(accountName), rest].join(".");
           } catch (err) {}
-        }) ?? undefined;
+        })
+        .filter(Boolean) as Block;
 
       acc[snakeCase(k)] = {
         params: {
