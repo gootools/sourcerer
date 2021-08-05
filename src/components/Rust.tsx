@@ -65,8 +65,8 @@ function Rust({ data }: { data?: Data }) {
       <Editor
         defaultLanguage="rust"
         options={{
-          fontSize: 19,
-          lineHeight: 28,
+          fontSize: 15,
+          lineHeight: 18,
           padding: {
             top: 20,
             bottom: 20,

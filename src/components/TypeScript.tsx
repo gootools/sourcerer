@@ -32,10 +32,10 @@ function TypeScript({ setRust }: { setRust: any }) {
   const handleEditorWillMount: BeforeMount = (monaco) => {
     monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
 
-    import("monaco-themes/themes/Tomorrow-Night-Bright.json").then((data) => {
-      monaco.editor.defineTheme("theme", data as any);
-      monaco.editor.setTheme("theme");
-    });
+    // import("monaco-themes/themes/Tomorrow-Night-Bright.json").then((data) => {
+    //   monaco.editor.defineTheme("theme", data as any);
+    //   monaco.editor.setTheme("theme");
+    // });
   };
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {

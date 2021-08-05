@@ -16,7 +16,7 @@ const App = () => {
         style={{
           flex: 4,
           filter:
-            "invert(92%) sepia(50%) saturate(318%) hue-rotate(263deg) brightness(67%) contrast(217%)",
+            "invert(92%) sepia(60%) saturate(218%) hue-rotate(263deg) brightness(70%) contrast(217%)",
         }}
       >
         <Rust data={data} />
