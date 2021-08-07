@@ -1,0 +1,111 @@
+[
+  {
+    "parsed": [
+      {
+        "name": "Puppet",
+        "properties": {
+          "puppet": {
+            "type": {
+              "data?": {
+                "type": "u64"
+              }
+            }
+          }
+        },
+        "methods": {
+          "initialize": {
+            "block": ["this.puppet = {};"],
+            "decorators": ["@init(\"puppet\")"]
+          },
+          "setData": {
+            "block": ["this.puppet.data = data;"],
+            "decorators": ["@mut(\"puppet\")"],
+            "params": {
+              "data": "u64"
+            }
+          }
+        }
+      },
+      {
+        "name": "PuppetMaster",
+        "properties": {
+          "puppetProgram": {
+            "type": "Pubkey"
+          }
+        },
+        "methods": {
+          "pullStrings": {
+            "params": {
+              "data": "u64"
+            },
+            "block": ["Puppet.setData(data);"],
+            "decorators": ["@cpi(Puppet)"]
+          }
+        }
+      }
+    ],
+    "anchorized": [
+      {
+        "name": "puppet",
+        "accounts": {
+          "Puppet": {
+            "data": "u64"
+          }
+        },
+        "derived": {
+          "Initialize<'info>": [
+            "#[account(init)]",
+            "pub puppet: ProgramAccount<'info, Puppet>,",
+            "pub rent: Sysvar<'info, Rent>,"
+          ],
+          "SetData<'info>": [
+            "#[account(mut)]",
+            "pub puppet: ProgramAccount<'info, Puppet>,"
+          ]
+        },
+        "instructions": {
+          "initialize": {
+            "block": [],
+            "params": {
+              "ctx": "Context<Initialize>"
+            }
+          },
+          "set_data": {
+            "block": ["ctx.accounts.puppet.data = data;"],
+            "params": {
+              "ctx": "Context<SetData>",
+              "data": "u64"
+            }
+          }
+        }
+      },
+      {
+        "name": "puppet_master",
+        "accounts": {},
+        "instructions": {
+          "pull_strings": {
+            "params": {
+              "_ctx": "Context<PullStrings>",
+              "data": "u64"
+            },
+            "block": [
+              "let cpi_program = ctx.accounts.puppet_program.clone();",
+              "let cpi_accounts = SetData {",
+              "puppet: ctx.accounts.puppet.clone().into(),",
+              "};",
+              "let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);",
+              "puppet::cpi::set_data(cpi_ctx, data)"
+            ]
+          }
+        },
+        "derived": {
+          "PullStrings<'info>": [
+            "#[account(mut)]",
+            "pub puppet: CpiAccount<'info, Puppet>,",
+            "pub puppet_program: AccountInfo<'info>,"
+          ]
+        }
+      }
+    ]
+  }
+]

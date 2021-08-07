@@ -1,12 +1,14 @@
 import { cpi, init, mut } from "sourcerer";
 
-class Puppet {
+export class Puppet {
   static puppet: {
     data?: u64;
   };
 
   @init("puppet")
-  static initialize() {}
+  static initialize() {
+    this.puppet = {};
+  }
 
   @mut("puppet")
   static setData(data: u64) {
