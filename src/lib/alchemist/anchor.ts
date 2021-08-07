@@ -94,8 +94,13 @@ const convertType = (tsType: string) => {
   switch (tsType) {
     case "Pubkey":
       return "Pubkey";
+    case "string":
+      return "String";
+    case "Vec":
+      return "Vec";
     default:
-      return tsType.toLowerCase();
+      return tsType;
+    // return tsType.toLowerCase();
   }
 };
 

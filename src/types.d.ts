@@ -1,21 +1,25 @@
 export {};
 
 declare global {
-  type U8 = number;
-  type U16 = number;
-  type U32 = number;
-  type U64 = number;
-  type U128 = number;
-  type Usize = number;
+  type u8 = number;
+  type u16 = number;
+  type u32 = number;
+  type u64 = number;
+  type u128 = number;
+  type usize = number;
 
-  type I8 = number;
-  type I16 = number;
-  type I32 = number;
-  type I64 = number;
-  type I128 = number;
-  type Isize = number;
+  type i8 = number;
+  type i16 = number;
+  type i32 = number;
+  type i64 = number;
+  type i128 = number;
+  type isize = number;
 
   type Pubkey = number;
 
   type ProtoOf<T> = Pick<T, keyof T>;
+
+  interface Vec<T> {
+    (arg: T): T;
+  }
 }
