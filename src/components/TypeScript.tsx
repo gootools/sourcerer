@@ -1,7 +1,7 @@
 import { BeforeMount, OnMount } from "@monaco-editor/react";
 import { mergeDeepRight } from "rambda";
 import React, { useEffect, useMemo } from "react";
-import fallbackDefaultValue from "../lib/alchemist/tests/basic3/cpi?raw";
+import fallbackDefaultValue from "../lib/alchemist/tests/basic3/basic3?raw";
 import Worker from "../lib/alchemist/worker.ts?worker";
 import sourcerer from "../lib/sourcerer.ts?raw";
 import types from "../types.d.ts?raw";

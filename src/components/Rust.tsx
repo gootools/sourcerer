@@ -1,67 +1,45 @@
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-import React, { useState } from "react";
+import type { RustFile } from "lib/alchemist/rust";
+import React, { useEffect, useState } from "react";
 import "../lib/rustfmt-wasm/wasm_rustfmt";
 import wasmUrl from "../lib/rustfmt-wasm/wasm_rustfmt_bg.wasm?url";
 import Editor from "./shared/Editor";
 
-let rustfmt: (code: string) => {
-  free(): void;
-  code(): string;
-  error(): string;
-};
-
-window.wasm_bindgen(wasmUrl).then(() => {
-  rustfmt = window.wasm_bindgen.rustfmt;
-});
-
 export interface Data {
   anchor: Array<any>;
-  rust: string;
+  rust: Array<RustFile>;
 }
 
-function Rust({ data }: { data?: Data }) {
+const RustEditor = ({ rust }: { rust: Data["rust"] }) => {
   const [tab, setTab] = useState(0);
-  let rust = data?.rust ?? "";
-  let anchor = data?.anchor ?? [];
+  let { code } = rust[tab];
 
-  if (rustfmt) {
-    const result = rustfmt(rust);
-    const err = result.error();
-    if (err) {
-      rust = "";
-      console.error(err);
-    } else {
-      rust = result.code();
-    }
-    result.free();
+  // TODO: move to webworker
+  const result = window.wasm_bindgen.rustfmt(code);
+  const err = result.error();
+  if (err) {
+    code = "";
+    console.error(err);
+  } else {
+    code = result.code();
   }
-
-  // const handleEditorDidMount: OnMount = (editor, monaco) => {
-  //   const model = monaco.editor.createModel(rust);
-  //   editor.setModel(model);
-  // };
+  result.free();
 
   return (
     <>
-      {anchor.length > 1 && (
-        <Tabs
-          allowScrollButtonsMobile
-          aria-label="tabs"
-          onChange={(_, idx) => setTab(idx)}
-          scrollButtons
-          value={tab}
-          variant="scrollable"
-        >
-          {anchor.map(({ name }: { name: string }) => (
-            <Tab
-              label={`${name}.rs`}
-              style={{ textTransform: "none" }}
-              key={name}
-            />
-          ))}
-        </Tabs>
-      )}
+      <Tabs
+        allowScrollButtonsMobile
+        aria-label="tabs"
+        onChange={(_, idx) => setTab(idx)}
+        scrollButtons
+        value={tab >= rust.length ? 0 : tab}
+        variant="scrollable"
+      >
+        {rust.map(({ name }) => (
+          <Tab label={name} style={{ textTransform: "none" }} key={name} />
+        ))}
+      </Tabs>
       <Editor
         defaultLanguage="rust"
         options={{
@@ -72,13 +50,23 @@ function Rust({ data }: { data?: Data }) {
             bottom: 20,
           },
           readOnly: true,
-          // model: null,
         }}
-        value={rust}
-        // onMount={handleEditorDidMount}
+        value={code}
       />
     </>
   );
-}
+};
+
+const Rust = ({ data }: { data?: Data }) => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    window.wasm_bindgen(wasmUrl).then(() => {
+      setLoaded(true);
+    });
+  }, []);
+
+  return data?.rust && loaded ? <RustEditor {...data} /> : null;
+};
 
 export default Rust;

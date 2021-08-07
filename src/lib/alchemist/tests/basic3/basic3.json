@@ -13,7 +13,6 @@
       },
       "methods": {
         "initialize": {
-          "block": ["this.puppet = {};"],
           "decorators": ["@init(\"puppet\")"]
         },
         "setData": {

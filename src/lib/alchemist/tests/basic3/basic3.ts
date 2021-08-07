@@ -7,7 +7,7 @@ export class Puppet {
 
   @init("puppet")
   static initialize() {
-    this.puppet = {};
+    // this.puppet = {};
   }
 
   @mut("puppet")
