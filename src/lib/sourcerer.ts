@@ -53,12 +53,14 @@ export function signer(_accountName: string) {
 interface MutOpts {
   hasOne?: string;
 }
-export function mut(_accountName: string, _opts: MutOpts = {}) {
-  return function (
-    _target: any,
-    _propertyKey: string,
-    _descriptor: PropertyDescriptor
-  ) {};
+export function mut<CK extends string>(_accountName: CK, _opts: MutOpts = {}) {
+  return <T extends { [P in CK]: unknown }, K extends keyof T, F extends T[K]>(
+    _proto: ProtoOf<T> & { [P in CK]: Record<string, unknown> },
+    _propertyKey: K,
+    _descriptor: TypedPropertyDescriptor<F>
+  ) => {
+    // Do stuff.
+  };
 }
 
 export function hasOne(pubkey: string) {
