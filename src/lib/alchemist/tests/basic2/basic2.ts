@@ -4,7 +4,7 @@ export class Basic_2 {
   @hasOne("authority")
   counter: {
     authority: Pubkey;
-    count: U64;
+    count: u64;
   };
 
   @init("counter")

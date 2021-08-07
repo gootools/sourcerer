@@ -10,7 +10,7 @@
               "type": "Pubkey"
             },
             "count": {
-              "type": "U64"
+              "type": "u64"
             }
           }
         }

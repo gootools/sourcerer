@@ -10,7 +10,7 @@
       "methods": {
         "pullStrings": {
           "params": {
-            "data": "U64"
+            "data": "u64"
           },
           "block": ["Puppet.setData(data);"],
           "decorators": ["@cpi(Puppet)"]

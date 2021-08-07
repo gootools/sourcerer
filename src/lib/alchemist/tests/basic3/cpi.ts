@@ -2,21 +2,21 @@ import { cpi, init, mut } from "sourcerer";
 
 class Puppet {
   static puppet: {
-    data?: U64;
+    data?: u64;
   };
 
   @init("puppet")
   static initialize() {}
 
   @mut("puppet")
-  static setData(data: U64) {
+  static setData(data: u64) {
     this.puppet.data = data;
   }
 }
 
 export class PuppetMaster {
   @cpi(Puppet)
-  static pullStrings(data: U64) {
+  static pullStrings(data: u64) {
     Puppet.setData(data);
   }
 }

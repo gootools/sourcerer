@@ -6,7 +6,7 @@
         "myAccount": {
           "type": {
             "data": {
-              "type": "U64"
+              "type": "u64"
             }
           }
         }
@@ -15,14 +15,14 @@
         "initialize": {
           "decorators": ["@init(\"myAccount\")"],
           "params": {
-            "data": "U64"
+            "data": "u64"
           },
           "block": ["this.myAccount.data = data;"]
         },
         "update": {
           "decorators": ["@mut(\"myAccount\")"],
           "params": {
-            "data": "U64"
+            "data": "u64"
           },
           "block": ["this.myAccount.data = data;"]
         }

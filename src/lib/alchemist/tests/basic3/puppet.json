@@ -6,7 +6,7 @@
         "puppet": {
           "type": {
             "data?": {
-              "type": "U64"
+              "type": "u64"
             }
           }
         }
@@ -20,7 +20,7 @@
           "block": ["this.puppet.data = data;"],
           "decorators": ["@mut(\"puppet\")"],
           "params": {
-            "data": "U64"
+            "data": "u64"
           }
         }
       }

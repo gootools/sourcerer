@@ -2,7 +2,7 @@ import { init, mut } from "sourcerer";
 
 export class Puppet {
   static puppet: {
-    data?: U64;
+    data?: u64;
   };
 
   @init("puppet")
@@ -11,7 +11,7 @@ export class Puppet {
   }
 
   @mut("puppet")
-  static setData(data: U64) {
+  static setData(data: u64) {
     this.puppet.data = data;
   }
 }
