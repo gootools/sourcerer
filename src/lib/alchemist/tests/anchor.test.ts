@@ -6,9 +6,14 @@ import { anchorify } from "../anchor";
 import { rustify } from "../rust";
 import { parse } from "../typescript";
 
+type TestJSON = Array<{
+  parsed: Record<string, any>;
+  anchorized: Record<string, any>;
+}>;
+
 glob.sync(join(__dirname, "basic*/*.ts")).forEach((tsFilePath) => {
   describe(basename(tsFilePath), () => {
-    const json = pipe(
+    const json: TestJSON = pipe(
       replace(".ts", ".json"),
       readFileSync,
       toString,

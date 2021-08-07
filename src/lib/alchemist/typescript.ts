@@ -1,5 +1,6 @@
 import { trim } from "rambda";
 import { Node, Project, PropertyDeclaration } from "ts-morph";
+import { removeEmptyValues } from "./common";
 
 type PropertyType = "string" | Record<string, { type: PropertyType }>;
 interface Property {
@@ -62,7 +63,7 @@ export const parse = (ts: string): Array<Program> => {
       }
     });
 
-    return program;
+    return removeEmptyValues(program);
   });
 };
 
