@@ -20,7 +20,7 @@
     "just-pascal-case": "^1.1.0",
     "just-snake-case": "^1.2.1",
     "monaco-editor": "^0.26.1",
-    "monaco-themes": "^0.3.3",
+    "monaco-themes": "^0.4.0",
     "rambda": "^6.9.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
