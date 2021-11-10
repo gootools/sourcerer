@@ -18,7 +18,7 @@
     "@monaco-editor/react": "^4.2.1",
     "just-capitalize": "^1.0.1",
     "just-pascal-case": "^1.1.0",
-    "just-snake-case": "^1.2.1",
+    "just-snake-case": "^3.0.0",
     "monaco-editor": "^0.26.1",
     "monaco-themes": "^0.3.3",
     "rambda": "^6.9.0",
